@@ -1,6 +1,6 @@
-# StringInterpolator
+# String interpolate utility
 
-A small String interpolate utility. Use it to interpolate strings using one or more Objects for replacements.
+A small String interpolate utility. Use it to replace tags within template strings using one or more Objects for replacements.
 
 The interpolator is an Object containing two methods: `interpolate` and `interpolateClear`.
 
