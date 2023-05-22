@@ -1,4 +1,4 @@
-window.interpolateFactory = () => {
+function interpolateFactory() {
   const {isStringOrNumber, isObject, invalidate, replacement, replacer, replace} = { 
     isStringOrNumber: v => [String, Number].find(type => Object.getPrototypeOf( v ?? ``)?.constructor === type),
     isObject: v => Object.getPrototypeOf( v ?? ``)?.constructor === Object,
@@ -19,3 +19,5 @@ window.interpolateFactory = () => {
     clearInvalidUsing:  (str, defaultReplacementValue = ``, ...tokens) => interpolate(str, defaultReplacementValue, ...tokens),
   }
 }
+
+window.interpolate = interpolateFactory();
