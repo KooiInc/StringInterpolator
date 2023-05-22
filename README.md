@@ -1,6 +1,6 @@
 # StringInterpolator
 
-A small String interpolate utility. Use it to interpolate strings using a single Object or an Array of Objects.
+A small String interpolate utility. Use it to interpolate strings using one or more Objects for replacements.
 
 The interpolator is an Object containing two methods: `interpolate` and `interpolateClear`.
 
