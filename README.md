@@ -44,5 +44,6 @@ document.body.insertAdjacentHTML(`beforeend`, interpolate(table, { rows: interpo
 ```
 Example @[Stackblitz](https://stackblitz.com/edit/web-platform-ehwrsp?file=script.js). Result
 
-![image](https://github.com/KooiInc/StringInterpolator/assets/836043/ee4feef8-dc81-4b36-b089-9b1ec430c536)
+![image](https://github.com/KooiInc/StringInterpolator/assets/836043/034d5b9c-8247-4f69-af76-503594ec6622)
+
 
