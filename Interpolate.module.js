@@ -17,7 +17,7 @@ function interpolateFactory() {
     .reduce( (acc, token) => acc.concat(!isObject(token) ? `` : replace(str, token, defaultReplacer )), ``);
 
   return {
-    default: (str, ...tokens) => interpolate(...[str,,...tokens]),
-    clearInvalidUsing:  (str, defaultReplacementValue = ``, ...tokens) => interpolate(str, defaultReplacementValue, ...tokens),
+    interpolate: (str, ...tokens) => interpolate(...[str,,...tokens]),
+    interpolateClear:  (str, defaultReplacementValue = ``, ...tokens) => interpolate(str, defaultReplacementValue, ...tokens),
   }
 }
