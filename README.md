@@ -16,7 +16,8 @@ Where `String2Interpolate` contains replacement keys between accolades, e.g. `"H
 
 ```javascript
 <script type="module">
-  import { interpolate, interpolateClear, } from "https://kooiinc.github.io/StringInterpolator/Interpolate.module.js";
+  import { interpolate, interpolateClear, } 
+    from "https://kooiinc.github.io/StringInterpolator/Interpolate.module.js";
   // do stuff with it
 </script>  
 ```
