@@ -2,7 +2,11 @@
 
 A small String interpolate utility. Use it to interpolate strings using a single Object or an Array of Objects.
 
-Syntax: `interpolate( String, ...[Object])`
+The interpolator is an Object with two method properties: `interpolate` and `interpolateClear`;
+
+Syntax: 
+- `interpolate( String, ...[Object])` 
+- `interpolateClear( String, [String if replacement value is missing], ...[Object])`
 
 Import as module using (for example)
 
@@ -40,7 +44,8 @@ const rowReplacements = [
   {cell1: `row3 cell 1`, cell2: `row3 cell 2`, cell3: `row3 cell 2`},
   // ... etc
 ];
-document.body.insertAdjacentHTML(`beforeend`, interpolate(table, { rows: interpolate(row, ...rowReplacements) }) );
+document.body
+  .insertAdjacentHTML(`beforeend`, interpolate(table, { rows: interpolate(row, ...rowReplacements) }) );
 ```
 Example @[Stackblitz](https://stackblitz.com/edit/web-platform-ehwrsp?file=script.js). Result
 
