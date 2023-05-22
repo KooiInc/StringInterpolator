@@ -4,15 +4,19 @@ A small String interpolate utility. Use it to interpolate strings using a single
 
 The interpolator is an Object with two method properties: `interpolate` and `interpolateClear`;
 
+`interpolateClear` fills missing value with a replacement for missing replacement values, interpolate leaves such values untouched.
+
 Syntax: 
-- `interpolate( String, ...[Object])` 
-- `interpolateClear( String, [String if replacement value is missing], ...[Object])`
+- `interpolate( String2Interpolate, Object[, Object, ...])` 
+- `interpolateClear( String2Interpolate, [String if replacement value is missing], Object[, Object, ...])`
+
+Where `String2Interpolate` contains replacement keys between accolades, e.g. `"Hello {name}"`.
 
 Import as module using (for example)
 
 ```javascript
 <script type="module">
-  import interpolate from "https://kooiinc.github.io/StringInterpolator/Interpolate.module.js";
+  import { interpolate, interpolateClear, } from "https://kooiinc.github.io/StringInterpolator/Interpolate.module.js";
   // do stuff with it
 </script>  
 ```
@@ -22,7 +26,7 @@ Load as `window.interpolate` using (for example)
 ```javascript
 <script src="https://kooiinc.github.io/StringInterpolator/Interpolate.browser.js" >
   // copy interpolate from the global (window) namespace
-  const interpolate = window.interpolate;
+  const { interpolate, } = window.interpolate;
   // if you don't want to pollute [window]
   delete window.interpolate;
   // do stuff with it
