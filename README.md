@@ -2,17 +2,17 @@
 
 A small String interpolate utility. Use it to interpolate strings using a single Object or an Array of Objects.
 
-The interpolator is an Object with two method properties: `interpolate` and `interpolateClear`;
+The interpolator is an Object containing two methods: `interpolate` and `interpolateClear`.
 
-`interpolateClear` fills missing value with a replacement for missing replacement values, interpolate leaves such values untouched.
+`interpolateClear` fills missing replacement values with a given string (may be empty), `interpolate` leaves such missing replacement values untouched.
 
-Syntax: 
+## Syntax 
 - `interpolate( String2Interpolate, Object[, Object, ...])` 
 - `interpolateClear( String2Interpolate, [String if replacement value is missing], Object[, Object, ...])`
 
 Where `String2Interpolate` contains replacement keys between accolades, e.g. `"Hello {name}"`.
 
-Import as module using (for example)
+### Import as module using (for example)
 
 ```javascript
 <script type="module">
@@ -21,7 +21,7 @@ Import as module using (for example)
 </script>  
 ```
 
-Load as `window.interpolate` using (for example)
+### Load as `window.interpolate` using (for example)
 
 ```javascript
 <script src="https://kooiinc.github.io/StringInterpolator/Interpolate.browser.js" >
