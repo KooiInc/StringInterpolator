@@ -6,6 +6,8 @@ The interpolator is an Object containing two methods: `interpolate` and `interpo
 
 `interpolateClear` fills missing replacement values with a given string (may be empty), `interpolate` leaves such missing replacement values untouched.
 
+**Note** the `interpolate` function is embedded in [es-string-fiddler](https://github.com/KooiInc/es-string-fiddler).
+
 ## Syntax 
 - `interpolate( String2Interpolate, Object[, Object, ...])` 
 - `interpolateClear( String2Interpolate, [String if replacement value is missing], Object[, Object, ...])`
