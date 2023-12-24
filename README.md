@@ -9,10 +9,14 @@ The interpolator is an Object containing two methods: `interpolate` and `interpo
 **Note** the `interpolate` function is embedded in [es-string-fiddler](https://github.com/KooiInc/es-string-fiddler) (exposed as `[string].format`).
 
 ## Syntax 
-- `interpolate( String2Interpolate, Object[, Object, ...])` 
-- `interpolateClear( String2Interpolate, [String if replacement value is missing], Object[, Object, ...])`
+- `interpolate( String2Interpolate, Object[, Object, ...] )` 
+- `interpolateClear( String2Interpolate, Object[, Object, ...] )`
+- `const myInterpolator = interpolateFactory( [default replacement string value] )`
 
 Where `String2Interpolate` contains replacement keys between accolades, e.g. `"Hello {name}"`.
+The parameter(s) can be either a number of key-value pairs (e.g. `{name: "Pete", [name: "Mary"], ...}`)
+or one key-value paire, where replacement values are arrays (e.g. `{name: ["Pete", ["Charlotte", ...]}`).  
+Multiple replacement values result in multiple strings.
 
 ### Import as module using (for example)
 
@@ -29,9 +33,7 @@ Where `String2Interpolate` contains replacement keys between accolades, e.g. `"H
 ```javascript
 <script src="https://kooiinc.github.io/StringInterpolator/Interpolate.browser.js" >
   // copy interpolate from the global (window) namespace
-  const { interpolate, } = window.interpolate;
-  // if you don't want to pollute [window]
-  delete window.interpolate;
+  const { interpolate, interpolateClean } = window.interpolator;
   // do stuff with it
 </script>  
 ```
@@ -40,8 +42,7 @@ Where `String2Interpolate` contains replacement keys between accolades, e.g. `"H
 
 ```javascript
 // retrieved as browser script
-const { interpolate, } = window.interpolate;
-delete window.interpolate;
+const { interpolate, } = window.interpolator;
 
 const row = `<tr><td> {cell1} </td><td> {cell2} </td><td> {cell3} </td>`;
 const table = `<table><tr><th>first</th><th>second</th><th>third</th><tbody> {rows} </tbody></table>`;
