@@ -1,3 +1,4 @@
+// See https://stackblitz.com/edit/web-platform-nmqf7o?file=script.js for examples
 const interpolate = interpolateFactory(null);
 const interpolateClear = interpolateFactory(``);
 export default { interpolate, interpolateClear, interpolateFactory };
