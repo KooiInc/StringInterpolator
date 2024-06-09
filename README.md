@@ -14,7 +14,7 @@ The module also exports the `interpolateClear` function and the factory function
 `interpolateClear` Replaces missing replacement values (e.g. `{token1: null}`) 
 with a an empty string.
 
-Besides these two functions, on initialization `String.prototype` is extended with two `Symbol`s: 
+Besides the three exported functions, on initialization `String.prototype` is extended with two `Symbol`s: 
 `Symbol.for("interpolate")` and `Symbol.for("interpolate$")`, the latter being the method that 
 clears missing replacement values (replaces them with `""`).
 
