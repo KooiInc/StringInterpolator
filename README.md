@@ -1,62 +1,87 @@
 # String interpolate utility
 
-A small String interpolate utility. Use it to replace tags within template strings using one or more Objects for replacements.
+A small string interpolator/tokenizer utility. Use it to replace tags (tokens) within template strings 
+using one or more Objects for replacements.
 
-The interpolator is an Object containing two methods: `interpolate` and `interpolateClear`.
+The utility default export is a function to replace one or more tokens (`"Some string {token1}, {token2}"`) within
+a string. 
 
-`interpolateClear` fills missing replacement values with a given string (may be empty), `interpolate` leaves such missing replacement values untouched.
+The tokens are replaced using one or more objects containing the tokens to replace as keys and the
+values to replace it/them with (
+`[imported interpolator]("Some string {token1}, {token2}", {token1: "one"}, token2: "two"})`)).
 
-**Note** the `interpolate` function is embedded in [es-string-fiddler](https://github.com/KooiInc/es-string-fiddler) (exposed as `[string].format`).
+The module also exports `interpolateClear`.  `interpolateClear` replaces missing replacement 
+values (e.g. `{token1: null}`) with a an empty string.
 
-## Syntax 
-- `interpolate( String2Interpolate, Object[, Object, ...] )` 
-- `interpolateClear( String2Interpolate, Object[, Object, ...] )`
-- `const myInterpolator = interpolateFactory( [default replacement string value] )`
+Besides these two functions, on initialization `String.prototype` is extended with two `Symbol`s: 
+`Symbol.for("interpolate")` and `Symbol.for("interpolate$")`, the latter being the method that 
+clears missing replacement values (replaces them with `""`).
 
-Where `String2Interpolate` contains replacement keys between accolades, e.g. `"Hello {name}"`.
-The parameter(s) can be either a number of key-value pairs (e.g. `{name: "Pete", [name: "Mary"], ...}`)
-or one key-value paire, where replacement values are arrays (e.g. `{name: ["Pete", ["Charlotte", ...]}`).  
+## Syntax
+*Note*: default imported as `interpolate`
+- `const myInterpolator = interpolateFactory( [defaultReplacer: string (default "")] )`
+- `[imported default interpolate function]( String2Interpolate: string, Object[, Object, ...] )` 
+- `[imported interpolateClear function( String2Interpolate: string, Object[, Object, ...] )`
+- `"String {t1} {t2}"[Symbol.for("interpolate")](Object[, Object, ...])`
+- `"String {t1} {t2}"[Symbol.for("interpolate$"](Object[, Object, ...])`
+
+Where `String2Interpolate` contains replacement keys between accolades, e.g. `"Hello {prename} {lastname}"`.
+The parameter(s) can be either 
+- a number of key-value pairs<br>(e.g. `{prename: "Pete", lastName: "Johnson"}, [{prename: "Mary", lastname: "Doe"], ...}`)
+- or one key-value paire, where replacement values are arrays<br>(e.g. `{prename: ["Pete", ["Charlotte", ...], lastname: ["Johnson", "Doe", ...]}`).  
+
 Multiple replacement values result in multiple strings.
 
-### Import as module using (for example)
+### Import as module ("Interpolate.module.js")
 
 ```javascript
 <script type="module">
-  import { interpolate, interpolateClear, } 
-    from "https://kooiinc.github.io/StringInterpolator/Interpolate.module.js";
+  import { default as interpolate, interpolateClear, } 
+    from "[location of Interpolate.module.js]";
   // do stuff with it
 </script>  
 ```
 
-### Load as `window.interpolate` using (for example)
-
+### Import as commonjs module ("Interpolate.commonjs.js")
 ```javascript
-<script src="https://kooiinc.github.io/StringInterpolator/Interpolate.browser.js" >
-  // copy interpolate from the global (window) namespace
-  const { interpolate, interpolateClean } = window.interpolator;
-  // do stuff with it
-</script>  
+const interpolate = require("../Interpolate.commonjs.js").default;
+// example
+const hi = "hello {wrld}";
+console.log(`${ [
+  interpolate(hi, {wrld: "world"}),
+  hi[Symbol.for("interpolate")]({wrld: `milky way`}),
+  interpolate("hello {wrld}"),
+].join(`\n`)}`);
 ```
 
-## Example
+### Load from `window.interpolate` ("Interpolate.browser.js")
 
 ```javascript
-// retrieved as browser script
-const { interpolate, } = window.interpolator;
-
-const row = `<tr><td> {cell1} </td><td> {cell2} </td><td> {cell3} </td>`;
-const table = `<table><tr><th>first</th><th>second</th><th>third</th><tbody> {rows} </tbody></table>`;
-const rowReplacements = [
+<script src="[location of Interpolate.browser.js]"></script>
+<!-- example -->
+<script>
+  const { default: interpolate, } = window.interpolate;
+  console.log( interpolate(
+    "Hello {wrld}\n",
+    {wrld: "world"},
+    {wrld: "milky way"},
+    {wrld: "universe"} ) );
+  const row = `<tr><td> {cell1} </td><td> {cell2} </td><td> {cell3} </td>`;
+  const table = `<table><tr><th>first</th><th>second</th><th>third</th><tbody> {rows} </tbody></table>`;
+  const rowReplacements = [
   {cell1: `row1 cell 1`, cell2: `row1 cell 2`, cell3: `row1 cell 2`},
   {cell1: `row2 cell 1`, cell2: `row2 cell 2`, cell3: `row2 cell 2`},
   {cell1: `row3 cell 1`, cell2: `row3 cell 2`, cell3: `row3 cell 2`},
   // ... etc
-];
-document.body
-  .insertAdjacentHTML(`beforeend`, interpolate(table, { rows: interpolate(row, ...rowReplacements) }) );
+  ];
+  // use symbolic String extension (Symbol.for("interpolate") assigned as 'tokenize')
+  const tokenize = Symbol.for("interpolate");
+  document.body
+  .insertAdjacentHTML( `beforeend`, table[tokenize]({ rows: interpolate(row, ...rowReplacements) }) );
+</script>
 ```
-Example @[Stackblitz](https://stackblitz.com/edit/web-platform-ehwrsp?file=script.js). Result
 
+The resulting `<table>` from the above example would be:
 ![image](https://github.com/KooiInc/StringInterpolator/assets/836043/034d5b9c-8247-4f69-af76-503594ec6622)
 
 
