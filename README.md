@@ -20,6 +20,8 @@ clears missing replacement values (replaces them with `""`).
 
 An (forkable) example can be found at **[StackBlitz](https://stackblitz.com/edit/web-platform-nmqf7o?file=script.js)**.
 
+The Stringinterpolator module is part of [es-string-fiddler](https://github.com/KooiInc/es-string-fiddler).
+
 ## Syntax
 - `const myInterpolator = interpolateFactory( [defaultReplacer: string (default "")] )`
 - `[imported default interpolate function]( String2Interpolate: string, Object[, Object, ...] )` 
