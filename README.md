@@ -17,8 +17,9 @@ Besides these two functions, on initialization `String.prototype` is extended wi
 `Symbol.for("interpolate")` and `Symbol.for("interpolate$")`, the latter being the method that 
 clears missing replacement values (replaces them with `""`).
 
+An (forkable) example can be found at **[StackBlitz](https://stackblitz.com/edit/web-platform-nmqf7o?file=script.js)**.
+
 ## Syntax
-*Note*: default imported as `interpolate`
 - `const myInterpolator = interpolateFactory( [defaultReplacer: string (default "")] )`
 - `[imported default interpolate function]( String2Interpolate: string, Object[, Object, ...] )` 
 - `[imported interpolateClear function( String2Interpolate: string, Object[, Object, ...] )`
@@ -66,6 +67,8 @@ console.log(`${ [
     {wrld: "world"},
     {wrld: "milky way"},
     {wrld: "universe"} ) );
+  
+  // create a table
   const row = `<tr><td> {cell1} </td><td> {cell2} </td><td> {cell3} </td>`;
   const table = `<table><tr><th>first</th><th>second</th><th>third</th><tbody> {rows} </tbody></table>`;
   const rowReplacements = [
@@ -77,7 +80,7 @@ console.log(`${ [
   // use symbolic String extension (Symbol.for("interpolate") assigned as 'tokenize')
   const tokenize = Symbol.for("interpolate");
   document.body
-  .insertAdjacentHTML( `beforeend`, table[tokenize]({ rows: interpolate(row, ...rowReplacements) }) );
+    .insertAdjacentHTML( `beforeend`, table[tokenize]({ rows: interpolate(row, ...rowReplacements) }) );
 </script>
 ```
 
