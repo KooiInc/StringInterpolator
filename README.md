@@ -10,9 +10,9 @@ The tokens are replaced using one or more objects containing the tokens to repla
 values to replace it/them with (
 `[imported interpolator]("Some string {token1}, {token2}", {token1: "one"}, token2: "two"})`)).
 
-The module also exports the `interpolateClear` function.  
+The module also exports the `interpolateClear` function and the factory function itself named `interpolateFactory`.  
 `interpolateClear` Replaces missing replacement values (e.g. `{token1: null}`) 
-with a an empty string and the factory function itself named `interpolateFactory`.
+with a an empty string.
 
 Besides these two functions, on initialization `String.prototype` is extended with two `Symbol`s: 
 `Symbol.for("interpolate")` and `Symbol.for("interpolate$")`, the latter being the method that 
