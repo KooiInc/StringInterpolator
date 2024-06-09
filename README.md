@@ -3,15 +3,16 @@
 A small string interpolator/tokenizer utility. Use it to replace tags (tokens) within template strings 
 using one or more Objects for replacements.
 
-The utility default export is a function to replace one or more tokens (`"Some string {token1}, {token2}"`) within
-a string. 
+The utility default export is, a function to replace one or more tokens (`"Some string {token1}, {token2}"`) 
+within a string.
 
 The tokens are replaced using one or more objects containing the tokens to replace as keys and the
 values to replace it/them with (
 `[imported interpolator]("Some string {token1}, {token2}", {token1: "one"}, token2: "two"})`)).
 
-The module also exports `interpolateClear`.  `interpolateClear` replaces missing replacement 
-values (e.g. `{token1: null}`) with a an empty string.
+The module also exports the `interpolateClear` function.  
+`interpolateClear` Replaces missing replacement values (e.g. `{token1: null}`) 
+with a an empty string and the factory function itself named `interpolateFactory`.
 
 Besides these two functions, on initialization `String.prototype` is extended with two `Symbol`s: 
 `Symbol.for("interpolate")` and `Symbol.for("interpolate$")`, the latter being the method that 
@@ -22,7 +23,7 @@ An (forkable) example can be found at **[StackBlitz](https://stackblitz.com/edit
 ## Syntax
 - `const myInterpolator = interpolateFactory( [defaultReplacer: string (default "")] )`
 - `[imported default interpolate function]( String2Interpolate: string, Object[, Object, ...] )` 
-- `[imported interpolateClear function( String2Interpolate: string, Object[, Object, ...] )`
+- `[imported interpolateClear function]( String2Interpolate: string, Object[, Object, ...] )`
 - `"String {t1} {t2}"[Symbol.for("interpolate")](Object[, Object, ...])`
 - `"String {t1} {t2}"[Symbol.for("interpolate$"](Object[, Object, ...])`
 
