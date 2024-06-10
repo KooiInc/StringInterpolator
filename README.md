@@ -48,7 +48,7 @@ Multiple replacement values result in multiple strings.
 
 ### Import as commonjs module ("Interpolate.commonjs.js")
 ```javascript
-const interpolate = require("../Interpolate.commonjs.js").default;
+const interpolate = require("[location of Interpolate.commonjs.js]").default;
 // example
 const hi = "hello {wrld}";
 console.log(`${ [
