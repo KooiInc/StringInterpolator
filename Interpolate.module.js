@@ -14,10 +14,6 @@ export {
 
 function interpolateFactory(defaultReplacer = "") {
   return function(str, ...tokens) {
-    if (!tokens?.length) {
-      tokens = [{"@!": defaultReplacer}];
-    }
-    
     return interpolate(str, processTokens(tokens));
   }
   
@@ -53,10 +49,10 @@ function interpolateFactory(defaultReplacer = "") {
     return str.replace(/\{(?<key>[a-z_\d]+)}/gim, getReplacerLambda(token));
   }
   
-  function mergeTokensFromArrayValues(obj) {
+  function mergeTokensFromArrayValues(tokenObject) {
     const merged = [];
     
-    Object.entries(obj).forEach(([key, value]) => {
+    Object.entries(tokenObject).forEach(([key, value]) => {
       value.forEach((v, i) => {
         merged[i] = merged[i] ?? {};
         merged[i][key] = v;
@@ -75,7 +71,7 @@ function interpolateFactory(defaultReplacer = "") {
   }
   
   function interpolate(str, tokens) {
-    return tokens.flat()
+    return !tokens?.length ? str : tokens.flat()
       .map(token => isObject(token) ? replace(str, token) : ``)
       .join(``);
   }
