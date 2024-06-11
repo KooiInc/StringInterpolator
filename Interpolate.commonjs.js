@@ -53,10 +53,7 @@ function interpolateFactory(defaultReplacer = "") {
     const merged = [];
     
     Object.entries(tokenObject).forEach(([key, value]) => {
-      value.forEach((v, i) => {
-        merged[i] = merged[i] ?? {};
-        merged[i][key] = v;
-      });
+      value.forEach((v, i) => (merged[i] ??= {}, merged[i][key] = v));
     });
     
     return merged;
