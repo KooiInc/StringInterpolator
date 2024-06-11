@@ -31,8 +31,10 @@ The Stringinterpolator module is part of [es-string-fiddler](https://github.com/
 
 Where `String2Interpolate` contains replacement keys between accolades, e.g. `"Hello {prename} {lastname}"`.
 The parameter(s) can be either 
-- a number of key-value pairs<br>(e.g. `{prename: "Pete", lastName: "Johnson"}, [{prename: "Mary", lastname: "Doe"], ...}`)
-- or one key-value paire, where replacement values are arrays<br>(e.g. `{prename: ["Pete", ["Charlotte", ...], lastname: ["Johnson", "Doe", ...]}`).  
+- a number of key-value pairs<br>
+  (e.g. `{prename: "Pete", lastName: "Johnson"}, {prename: "Mary", lastname: "Doe"}, ...`)
+- or a single `Object`, where replacement values are *Arrays*<br>
+  (e.g. `{ prename: ["Pete", ["Charlotte", ...], lastname: ["Johnson", "Doe", ...]}`).  
 
 Multiple replacement values result in multiple strings.
 
