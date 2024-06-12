@@ -17,12 +17,7 @@ const demoText = demoTexts();
 demo();
 
 function demo() {
-  log(
-    `!!<a target="_top" href="https://stackblitz.com/@KooiInc">All Stackblitz projects</a>`,
-    `!!<a target="_blank" href="https://github.com/KooiInc/StringInterpolator">Github Repository</a>`,
-    `!!<a target="_blank" href="https://github.com/KooiInc/es-string-fiddler">Used  by es-string-fiddler (Github)</a>`,
-    `!!<hr>${demoText.preSyntax}${demoText.syntax}`);
-  
+  log(...demoText.links, `!!<hr>${demoText.preSyntax}${demoText.syntax}`);
   const code4Array = demoText.code4Array;
   const tableTemplatesCode = demoText.tableTemplatesCode;
   
@@ -154,6 +149,13 @@ function getNamesObj() {
 }
 
 function demoTexts() {
+  const isStackblitz = /stackblitz/i.test(location.href);
+  const links = [
+      isStackblitz ? `!!<a target="_top" href="https://stackblitz.com/@KooiInc">All Stackblitz projects</a>` : `!!`,
+      `!!<a target="${isStackblitz ? `_blank` : `_top`}" href="https://github.com/KooiInc/StringInterpolator"
+          >Github Repository</a>`,
+      `!!<a target="_blank" href="https://github.com/KooiInc/es-string-fiddler">Used  by es-string-fiddler (Github)</a>`
+    ];
   const replacement = {blah: `FOOBLAH`, bar: `BARRED`};
   const someStr = `Blah [{blah}] and blah and {foo}, but then again [\\{bar\\}{bar}]`;
   const namesUsed = getNamesObj.toString()
@@ -161,6 +163,7 @@ function demoTexts() {
     .replace(/\n {2,}/g, `\n  `)
     .replace(/\n\s+]/, `\n]`);
   return {
+    links,
     preSyntax: `<div class="readme">The module exports the factory itself (<code>interpolateFactory</code>),
        the <code>interpolate</code> function (default) and the <code>interpolateClear</code> function (which
        clears empty placeholders).</div>
