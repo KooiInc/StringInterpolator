@@ -21,17 +21,7 @@ function demo() {
     `!!<a target="_top" href="https://stackblitz.com/@KooiInc">All Stackblitz projects</a>`,
     `!!<a target="_blank" href="https://github.com/KooiInc/StringInterpolator">Github Repository</a>`,
     `!!<a target="_blank" href="https://github.com/KooiInc/es-string-fiddler">Used  by es-string-fiddler (Github)</a>`,
-    `!!<hr>
-   <div class="readme">The module exports the factory itself (<code>interpolateFactory</code>),
-   the <code>interpolate</code> function (default), the <code>interpolateClear</code> function (which
-   clears empty placeholders).</div>
-
-   <div class="readme">Importing the module also provides two <code>Symbol</code>s that are used to extend
-   <code>String.prototype</code> (<code>Symbol.for("interpolate")</code> and
-   <code>Symbol.for("interpolate$")</code>).</div>
-
-   <h3 class="readme"><b>Syntax by example</b></h3>
-   ${demoText.syntax}`);
+    `!!<hr>${demoText.preSyntax}${demoText.syntax}`);
   
   const code4Array = demoText.code4Array;
   const tableTemplatesCode = demoText.tableTemplatesCode;
@@ -171,6 +161,16 @@ function demoTexts() {
     .replace(/\n {2,}/g, `\n  `)
     .replace(/\n\s+]/, `\n]`);
   return {
+    preSyntax: `<div class="readme">The module exports the factory itself (<code>interpolateFactory</code>),
+       the <code>interpolate</code> function (default) and the <code>interpolateClear</code> function (which
+       clears empty placeholders).</div>
+    
+       <div class="readme">Importing the module also provides two <code>Symbol</code>s that are used to extend
+       <code>String.prototype</code> (<code>Symbol.for("interpolate")</code> and
+       <code>Symbol.for("interpolate$")</code>).</div>
+    
+       <h3 class="readme"><b>Syntax by example</b></h3>`,
+    
     syntax:
       `<pre class="syntax language-javascript line-numbers"><code class="language-javascript">// import
 import {interpolateFactory}  from "[module location]";
