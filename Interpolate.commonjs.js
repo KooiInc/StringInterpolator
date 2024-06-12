@@ -13,6 +13,9 @@ module.exports = {
 };
 
 function interpolateFactory(defaultReplacer = "") {
+  defaultReplacer = isStringOrNumber(defaultReplacer) ?
+    String(defaultReplacer) : undefined;
+  
   return function(str, ...tokens) {
     return interpolate(str, processTokens(tokens));
   }
