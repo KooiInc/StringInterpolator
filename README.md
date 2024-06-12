@@ -18,9 +18,10 @@ Besides the three exported functions, on initialization `String.prototype` is ex
 `Symbol.for("interpolate")` and `Symbol.for("interpolate$")`, the latter being the method that 
 clears missing replacement values (replaces them with `""`).
 
-An (forkable) example can be found at **[StackBlitz](https://stackblitz.com/edit/web-platform-nmqf7o?file=script.js)**.
+Check the **[DEMO](https://kooiinc.github.io/StringInterpolator/)**, or the (forkable) 
+demo at **[StackBlitz](https://stackblitz.com/edit/web-platform-nmqf7o?file=script.js)**.
 
-The Stringinterpolator module is part of [es-string-fiddler](https://github.com/KooiInc/es-string-fiddler).
+The StringInterpolator module is used in the [es-string-fiddler](https://github.com/KooiInc/es-string-fiddler) module.
 
 ## Syntax
 - `const myInterpolator = interpolateFactory( [defaultReplacer: string (default "")] )`
