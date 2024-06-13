@@ -170,7 +170,9 @@ window.interpolate = {
   default: interpolateDefault,
   interpolateClear,
   interpolateFactory,
-};function interpolateFactory(defaultReplacer = "") {
+};
+
+function interpolateFactory(defaultReplacer = "") {
   defaultReplacer = IS(defaultReplacer, String, Number) ?
     String(defaultReplacer) : undefined;
   
