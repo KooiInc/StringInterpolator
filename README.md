@@ -44,17 +44,20 @@ Multiple replacement values result in multiple strings.
 ```javascript
 <script type="module">
   import { default as interpolate, interpolateClear, } 
-    from "[location of Interpolate.module.js]";
+    from "[path/to]/Interpolate.module.js]";
   // do stuff with it
 </script>  
 ```
 
-### Import as commonjs module ("Interpolate.commonjs.js")
+### Import in nodejs ("Interpolate.nodejs.js")
+_**First**_: install the package (`npm install` from the location of `Interpolate.node.js`)
+
 ```javascript
-const interpolate = require("[location of Interpolate.commonjs.js]").default;
+import {default as interpolate/*[, interpolateClear, interpolateFactory] */}
+  from "[path/to]/Interpolate.node.js]";
 // example
 const hi = "hello {wrld}";
-console.log(`${ [
+console.log(`${[
   interpolate(hi, {wrld: "world"}),
   hi[Symbol.for("interpolate")]({wrld: `milky way`}),
   interpolate("hello {wrld}"),
@@ -64,7 +67,7 @@ console.log(`${ [
 ### Load from `window.interpolate` ("Interpolate.browser.js")
 
 ```javascript
-<script src="[location of Interpolate.browser.js]"></script>
+<script src="[path/to]/Interpolate.browser.js]"></script>
 <!-- example -->
 <script>
   const { default: interpolate, } = window.interpolate;
