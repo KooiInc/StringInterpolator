@@ -1,3 +1,4 @@
+import IS from "typeofanything";
 const interpolateDefault = interpolateFactory(null);
 const interpolateClear = interpolateFactory(``);
 
@@ -6,45 +7,37 @@ Object.defineProperties(String.prototype, {
   [Symbol.for(`interpolate$`)]: { value(...args) { return interpolateClear(this, ...args); } },
 } );
 
-module.exports = {
-  default: interpolateDefault,
+export {
+  interpolateDefault as default,
   interpolateClear,
   interpolateFactory,
 };
 
 function interpolateFactory(defaultReplacer = "") {
-  defaultReplacer = isStringOrNumber(defaultReplacer) ?
+  defaultReplacer = IS(defaultReplacer, String, Number) ?
     String(defaultReplacer) : undefined;
   
   return function(str, ...tokens) {
     return interpolate(str, processTokens(tokens));
   }
   
-  function isStringOrNumber(v) {
-    return [String, Number].includes(v?.constructor);
-  }
-  
-  function isObject(v) {
-    return v?.constructor === Object;
-  }
-  
   function invalidate(key, keyExists) {
-    switch(true) {
-      case keyExists && isStringOrNumber(defaultReplacer):
-        return String(defaultReplacer);
-      default:
-        return `{${key}}`;
+    if (keyExists && IS(defaultReplacer, String, Number)) {
+      return String(defaultReplacer);
     }
+    
+    return `{${key}}`;
   }
   
   function replacement(key, token) {
-    return isStringOrNumber(token[key]) ? String(token[key]) : invalidate(key, token[key]);
+    const isValid = key in token;
+    return isValid && IS(token[key], String, Number) ? String(token[key]) : invalidate(key, isValid);
   }
   
   function getReplacerLambda(token) {
     return (...args) => {
       const keyArg = args.find(a => a.key);
-      return replacement(keyArg ? keyArg.key : `_`, token);
+      return replacement((keyArg ? keyArg.key : `_`), token);
     };
   }
   
@@ -71,8 +64,9 @@ function interpolateFactory(defaultReplacer = "") {
   }
   
   function interpolate(str, tokens) {
-    return !tokens?.length ? str : tokens.flat()
-      .map(token => isObject(token) ? replace(str, token) : ``)
+    return !tokens?.length ? str : tokens
+      .filter(token => token)
+      .map(token => IS(token, Object) ? replace(str, token) : ``)
       .join(``);
   }
 }
