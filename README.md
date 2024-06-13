@@ -49,7 +49,7 @@ Multiple replacement values result in multiple strings.
 </script>  
 ```
 
-### Import in nodejs ("Interpolate.nodejs.js")
+### Import in nodejs ("Interpolate.node.js")
 _**First**_: install the package (`npm install` from the location of `Interpolate.node.js`)
 
 ```javascript
