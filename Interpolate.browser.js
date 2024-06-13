@@ -156,7 +156,7 @@ function addSymbols2Object({is = `is`, type = `type`} = {}) {
   };
 }
 
-// Interpolator here
+/* --Interpolator here-- */
 
 const interpolateDefault = interpolateFactory(null);
 const interpolateClear = interpolateFactory(``);
