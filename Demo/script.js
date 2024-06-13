@@ -29,9 +29,8 @@ function demo() {
 
   setStyling();
   const theNamesClear = theNames.map(row =>
-    row.pre?.startsWith(`<b`) ? {...row, pre: `<b class="warn">CLEARED VALUES</b>`} : row);
-
-
+    !/ignored/i.test(row.pre) && row.pre?.startsWith(`<b`)
+       ? {...row, pre: `<b class="notifyHeader">Cleared values</b>`} : row);
   const theNamesTokensAsArrays = {
     pre: `Mary,Muhammed,Missy,Hillary,Foo,Bar,小平,Володимир,zero (0),Row,,missing value =>`
       .split(`,`).map(v => !v.length ? undefined : v),
@@ -44,8 +43,8 @@ function demo() {
     caption: `<code>tableRowTemplate[tokenize]</code> using <code>theNames</code>`,
     rows: tableRowTemplate[tokenize](...theNames) } );
   const table2 = tableTemplate[tokenize]({
-    caption: `<code>tableRowTemplate[tokenize$]</code> (empty/invalid values cleared)`,
-    rows: tableRowTemplate[tokenize$](undefined, ...theNamesClear) } );
+    caption: `<code>tableRowTemplate[tokenize$]</code> (empty/invalid values id)`,
+    rows: tableRowTemplate[tokenize$](...theNamesClear) } );
   const table3 = tableTemplate[tokenize]({
     caption: `<code>tableRowTemplate[tokenize]</code> token values are arrays`,
     rows: tableRowTemplate[tokenize](theNamesTokensAsArrays) } );
@@ -69,20 +68,15 @@ function setStyling() {
       border-collapse: collapse;
       min-width: 500px; }`,
     `table tbody tr:nth-child(even) { background-color: #ddd; }`,
-    `table td > .warn, table td > .largeArrowDown { display: block; margin-top: 0.6rem !important;}`,
     `table td, table th { padding: 2px 4px; fontSize: 0.9rem; height: 18px}`,
     `table th { backgroundColor: #999; color: #FFF; }`,
     `table tr td:first-child, table tr th:first-child {text-align: right; padding-right: 0.5rem; width:50%}`,
     `table caption { font-size: 0.9rem; font-weight: bold; border: 1px solid #ccc; padding: 0.5rem 0; }`,
     `th { font-weight: bold; text-align: left; border-bottom: 1px solid #999; }`,
     `.largeArrowDown:before{
-      content: '${repeat(`⬇`, 6)}';
-      font-size:1.2rem;
-      line-height:1rem;
-      vertical-align:top;
-      display:block;
-      color:red}`,
-    `b.warn { color: red; }`,
+      content: '${repeat(`⬇`, 3)}';
+      color:green; }`,
+    `b.notifyHeader { color: green; }`,
     `li.head {margin-left: -2rem !important;}`,
     `li.head table {margin-top: 1.2rem;}`,
     `li.head hr {margin-bottom: 1.2rem;}`,
@@ -131,18 +125,19 @@ function getNamesObj() {
     {pre: `Володимир`, last: `Зеленський`},
     {pre: `zero (0)`, last: 0},
     {pre: `Row`, last: 10},
-    {pre: `<b class="warn">NOT REPLACED</b>`, last: `<span class="largeArrowDown"></span>`},
+    {pre: `replacement-is-empty-string`, last: ''},     // ᐊ Empty string value IS replaced
+    {pre: `<b class="notifyHeader">Not replaced</b>`, last: `<span class="largeArrowDown"></span>`},
     // if !defaultReplacer ...
-    {pre: `Replacement-Is-Array`, last: [1,2,3]},       // ᐊ Array IS NOT replaced
-    {pre: `Replacement-Is-Empty-String`, last: ''},     // ᐊ Empty string IS NOT replaced
-    {pre: `Replacement-Is-Null`, last: null},           // ᐊ null IS NOT replaced
-    {pre: `Replacement-Is-Object`, last: {} },          // ᐊ Object IS NOT replaced
-    {pre: `Replacement-Is-Undefined`, last: undefined}, // ᐊ undefined IS NOT replaced
-    {pre: undefined, last: `Key-Is-Undefined`},         // ᐊ idem
-    {pre: `last-Not-Defined`},                          // ᐊ incomplete object, what exists is replaced
-    {some: `Nothing-2-Replace`, name: `nothing`},       // ᐊ invalid keys, IS NOT replaced
-    {},                                                 // ᐊ empty object, IS NOT replaced
-    [`nothing`, `nada`, `zip`, `没有什么`,               // ᐊ replacement not an Object, IGNORED
+    {pre: `replacement-Is-array`, last: [1,2,3]},       // ᐊ Array value IS NOT replaced/
+    {pre: `replacement-Is-null`, last: null},           // ᐊ null value IS NOT replaced
+    {pre: `replacement-Is-object`, last: {} },          // ᐊ Object value IS NOT replaced
+    {pre: `replacement-Is-undefined`, last: undefined}, // ᐊ undefined value IS NOT replaced
+    {pre: `<b class="notifyHeader">Ignored</b>`, last: `<span class="largeArrowDown"></span>`},
+    {last: `key-pre-does-not-exist`},                   // ᐊ undefined value IS NOT replaced
+    {pre: `key-last-does-not-exist`},                   // ᐊ incomplete object, what exists is replaced
+    {some: `nothing-to-replace`, name: `nothing`},      // ᐊ non relevant keys, tokens ignored
+    {},                                                 // ᐊ empty object, tokens ignored
+    [`nothing`, `nada`, `zip`, `没有什么`,               // ᐊ replacement not an Object, tokens ignored
      `niente`, `rien`, `ничего`]
   ];
 }
@@ -160,7 +155,8 @@ function demoTexts() {
   const namesUsed = getNamesObj.toString()
     .replace(/`/g, `"`)
     .replace(/\n {2,}/g, `\n  `)
-    .replace(/\n\s+]/, `\n]`);
+    .replace(/\n\s+]/, `\n]`)
+    .replace(/</g, `&lt;`);
   return {
     links,
     preSyntax: `<div class="readme">The module exports the factory itself (<code>interpolateFactory</code>),
