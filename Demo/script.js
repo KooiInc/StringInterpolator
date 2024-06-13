@@ -70,7 +70,7 @@ function setStyling() {
       min-width: 500px;
      }`,
     `table caption {
-      bold; border: 1px solid #ccc;
+      border: 1px solid #ccc;
       padding: 0.5rem;
       font-size: 14px;
       white-space: nowrap;
