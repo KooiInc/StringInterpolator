@@ -38,7 +38,7 @@ function interpolateFactory(defaultReplacer = "") {
   }
   
   function replacement(key, token) {
-    return isStringOrNumber(token[key]) ? String(token[key]) : invalidate(key, token[key]);
+    return isStringOrNumber(token[key]) ? String(token[key]) : invalidate(key, key in token);
   }
   
   function getReplacerLambda(token) {
