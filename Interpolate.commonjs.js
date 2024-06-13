@@ -28,9 +28,9 @@ function interpolateFactory(defaultReplacer = "") {
     return v?.constructor === Object;
   }
   
-  function invalidate(key) {
+  function invalidate(key, keyExists) {
     switch(true) {
-      case isStringOrNumber(defaultReplacer):
+      case keyExists && isStringOrNumber(defaultReplacer):
         return String(defaultReplacer);
       default:
         return `{${key}}`;
@@ -38,7 +38,7 @@ function interpolateFactory(defaultReplacer = "") {
   }
   
   function replacement(key, token) {
-    return isStringOrNumber(token[key]) ? String(token[key]) : invalidate(key);
+    return isStringOrNumber(token[key]) ? String(token[key]) : invalidate(key, token[key]);
   }
   
   function getReplacerLambda(token) {
