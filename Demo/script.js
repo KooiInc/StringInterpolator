@@ -156,7 +156,7 @@ function demoTexts() {
       `!!<a target="_blank" href="https://github.com/KooiInc/es-string-fiddler">Used  by es-string-fiddler (Github)</a>`
     ];
   const replacement = {blah: `FOOBLAH`, bar: `BARRED`};
-  const someStr = `Blah [{blah}] and blah and {foo}, but then again [\\{bar\\}{bar}]`;
+  const someStr = `Blah [{blah}] and blah and {foo}, but then again [\\{bar\\} | {bar}]`;
   const namesUsed = getNamesObj.toString()
     .replace(/`/g, `"`)
     .replace(/\n {2,}/g, `\n  `)
@@ -220,7 +220,7 @@ templateStringEx[tokenize$](
     
 // escaped "{" and/or "}" and non existing token values are ignored
 const replacement = { blah: "FOOBLAH", bar: "BARRED" };
-const someStr = "Blah [{blah}] and blah and {foo}, but then again [\\{bar\\}{bar}]";
+const someStr = "Blah [{blah}] and blah and {foo}, but then again [\\{bar\\} | {bar}]";
 //                                           ^                     ^ escaped/ignored
 //                                           ^ not in [replacement]/ignored
 someStr[tokenize](replacement); => "${someStr[tokenize](replacement)}"
