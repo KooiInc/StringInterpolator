@@ -43,7 +43,7 @@ function demo() {
     caption: `<code>tableRowTemplate[tokenize]</code> using <code>theNames</code>`,
     rows: tableRowTemplate[tokenize](...theNames) } );
   const table2 = tableTemplate[tokenize]({
-    caption: `<code>tableRowTemplate[tokenize$]</code> (empty/invalid values id)`,
+    caption: `<code>tableRowTemplate[tokenize$]</code> (empty/invalid values => empty string)`,
     rows: tableRowTemplate[tokenize$](...theNamesClear) } );
   const table3 = tableTemplate[tokenize]({
     caption: `<code>tableRowTemplate[tokenize]</code> token values are arrays`,
@@ -64,14 +64,21 @@ function setStyling() {
     `.container { position: absolute; inset: 0; overflow-y: auto; }`,
     `table {
       margin: 1rem 0;
-      font-family: arial;
+      font-family: verdana;
+      font-size: 0.9rem;
       border-collapse: collapse;
-      min-width: 500px; }`,
+      min-width: 500px;
+     }`,
+    `table caption {
+      bold; border: 1px solid #ccc;
+      padding: 0.5rem;
+      font-size: 14px;
+      white-space: nowrap;
+     }`,
     `table tbody tr:nth-child(even) { background-color: #ddd; }`,
-    `table td, table th { padding: 2px 4px; fontSize: 0.9rem; height: 18px}`,
+    `table td, table th { padding: 2px 4px; font-size: 14px; height: 18px}`,
     `table th { backgroundColor: #999; color: #FFF; }`,
     `table tr td:first-child, table tr th:first-child {text-align: right; padding-right: 0.5rem; width:50%}`,
-    `table caption { font-size: 0.9rem; font-weight: bold; border: 1px solid #ccc; padding: 0.5rem 0; }`,
     `th { font-weight: bold; text-align: left; border-bottom: 1px solid #999; }`,
     `.largeArrowDown:before{
       content: '${repeat(`⬇`, 3)}';
@@ -243,6 +250,7 @@ const tableTemplate = ${escHTML(`
   <tbody>{rows}</tbody>\\
 </table>"`)};
 const tableRowTemplate = ${escHTML(`"<tr><td>{pre}</td><td>{last}</td></tr>"`)};
+
 // the tokens used for tableRowTemplate
 const theNames = ${namesUsed.slice(namesUsed.indexOf(`[`), -1).trim()}</code></pre>`,
   };
