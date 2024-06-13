@@ -91,8 +91,7 @@ function setStyling() {
     `a[target]:before { color:rgba(0,0,238,0.7);font-size: 1.1rem;vertical-align:bottom }`,
     `a[target="_blank"]:before {content: '\\2197'' '; }`,
     `a[target="_top"]:before {content: '\\21BA'' '; }`,
-    `ul#log2screen { margin: 0 auto; }`,
-    `ul#log2screen, #log2screen .content { max-width: 40vw; } }`,
+    `ul#log2screen { margin: 0 auto; max-width: 40vw; }`,
     `#log2screen pre.syntax {
       margin-top: -0.7rem;
       margin-bottom: 1.5rem;
@@ -101,7 +100,7 @@ function setStyling() {
       background-color: revert;
       color: revert;
     }`,
-    `pre.syntax { with: 100%; }`,
+    `pre.syntax { width: 100%; }`,
     `.readme {
       margin-top: -0.4rem;
       margin-bottom: 1rem;
