@@ -1,4 +1,4 @@
-import IS from "https://cdn.jsdelivr.net/gh/KooiInc/typeofAnything@latest/typofany.module.min.js";
+import IS from "https://cdn.jsdelivr.net/gh/KooiInc/typeofAnything@latest/typeofany.module.min.js";
 const interpolateDefault = interpolateFactory(null);
 const interpolateClear = interpolateFactory(``);
 
