@@ -196,12 +196,14 @@ insert(templateStringEx,
     {wrld: null, univrs: "UNIVERSE"},
     {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
 
-// assign the Symbols from String.prototype
+// On importing interpolateFactory String.prototype
+// was extended using 2 Symbols. Here we
+// assign them to variables.
 const tokenize = Symbol.for("interpolate");
 const tokenize$ = Symbol.for("interpolate$");
 
-// use symbolic extension (now named tokenize/tokenize$)
-// ([tokenize]: keep tokens with empty values intact)
+// now we can use the 'symbolic extensions' (named tokenize/tokenize$)
+// [tokenize]: keep tokens with empty values intact
 templateStringEx[tokenize](
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
@@ -211,7 +213,7 @@ templateStringEx[tokenize](
     {wrld: null, univrs: "UNIVERSE"},
     {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
 
-// use symbolic extension [tokenize$] (cleanup empty values)
+// [tokenize$]: cleanup empty values
 templateStringEx[tokenize$](
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
