@@ -2,6 +2,12 @@ const { IS } = (initializeTOA(), window.typeofAny);
 const interpolateDefault = interpolateFactory(null);
 const interpolateClear = interpolateFactory(``);
 
+/**
+ * Extend String.prototype using the above two
+ * interpolate methods.
+ * Note: Symbols are unique, so there is no risk the
+ * methods overwrite things in other ES libraries.
+ */
 Object.defineProperties(String.prototype, {
   [Symbol.for(`interpolate`)]: { value(...args) { return interpolateDefault(this, ...args); } },
   [Symbol.for(`interpolate$`)]: { value(...args) { return interpolateClear(this, ...args); } },
