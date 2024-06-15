@@ -20,6 +20,11 @@ export {
   interpolateFactory,
 };
 
+/**
+ * Factory function to create an interpolate function with a default replacer.
+ * @param {string|number} defaultReplacer - Default value to use for missing tokens.
+ * @returns {Function} - The interpolation function.
+ */
 function interpolateFactory(defaultReplacer = "") {
   defaultReplacer = IS(defaultReplacer, String, Number) ?
     String(defaultReplacer) : undefined;
