@@ -1,7 +1,7 @@
 {
-  "name": "stringinterpolator",
+  "name": "es-string-interpolator",
   "version": "1.0.0",
-  "description": "",
+  "description": "a small module for ES string interpolation",
   "main": "Interpolate.module.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,10 +9,9 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/KooiInc/StringInterpolator"
+    "url": "git+https://github.com/KooiInc/StringInterpolator.git"
   },
   "dependencies": {
     "typeofanything": "latest"
-  },
-  "private": true
+  }
 }

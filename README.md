@@ -50,7 +50,8 @@ Multiple replacement values result in multiple strings.
 ```
 
 ### Import in nodejs ("Interpolate.node.js")
-_**First**_: install the package (`npm install` from the location of `Interpolate.node.js`)
+_**First**_: install the package (`npm install` from the location of `Interpolate.node.js`,
+or use the npm package: `npm i es-string-interpolator`)
 
 ```javascript
 import {default as interpolate/*[, interpolateClear, interpolateFactory] */}
