@@ -1,4 +1,4 @@
-const { IS } = TOAFactory();
+const { IS } = initializeTOA();
 const interpolateDefault = interpolateFactory(null);
 const interpolateClear = interpolateFactory(``);
 
@@ -133,7 +133,8 @@ function interpolateFactory(defaultReplacer = "") {
       .join(``);
   }
 }
-function TOAFactory() {
+
+function TOAFactory() {  
   const proxySymbol = Symbol.for('proxied');
   return {IS, maybe, typeOf, createWrappedProxy, extendObject: addSymbols2Object};
   
