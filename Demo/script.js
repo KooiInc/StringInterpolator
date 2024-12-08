@@ -9,7 +9,7 @@ const tokenize$ = Symbol.for("interpolate$");
 window.tokenize = tokenize;
 window.interpolate = interpolate;
 const { $, logFactory,  } =
-  await import("https://cdn.jsdelivr.net/gh/KooiInc/SBHelpers@latest/index.browser.bundled.js");
+  await import("https://cdn.jsdelivr.net/gh/KooiInc/SBHelpers/index.browser.bundled.js");
 const { log } = logFactory();
 const insert = interpolateFactory("¡no value!");
 const demoText = demoTexts();
