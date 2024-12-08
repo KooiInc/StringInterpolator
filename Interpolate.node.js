@@ -71,8 +71,8 @@ function interpolateFactory(defaultReplacer = "") {
    */
   function getReplacerLambda(token) {
     return (...args) => {
-      const keyArg = args.find(a => a.key);
-      return replacement((keyArg ? keyArg.key : `_`), token);
+      const replacementObject = args.find(a => a.key);
+      return replacement((replacementObject ? replacementObject.key : `_`), token);
     };
   }
   
