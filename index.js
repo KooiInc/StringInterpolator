@@ -84,7 +84,6 @@ function interpolateFactory(defaultReplacer = "") {
    * @returns {string} - The interpolated string.
    */
   function replace(str, token) {
-    console.log(token);
     return str.replace(/\{(?<key>[a-z_\d]+)}/gim, getReplacerLambda(token));
   }
   
