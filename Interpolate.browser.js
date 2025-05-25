@@ -82,6 +82,7 @@ function interpolateFactory(defaultReplacer = "") {
    * @returns {string} - The interpolated string.
    */
   function replace(str, token) {
+    console.log(token);
     return str.replace(/\{(?<key>[a-z_\d]+)}/gim, getReplacerLambda(token));
   }
   
@@ -129,16 +130,17 @@ function interpolateFactory(defaultReplacer = "") {
   function interpolate(str, tokens) {
     return !tokens?.length ? str : tokens
       .filter(token => token)
-      .map(token => IS(token, Object) ? replace(str, token) : ``)
+      .map((token, i) => IS(token, Object) ? replace(str, {...token, index: `${i+1}`}) : ``)
       .join(``);
   }
 }
+
 
 function TOAFactory() {
   Symbol.proxy = Symbol.for(`toa.proxy`);
   Symbol.is = Symbol.for(`toa.is`);
   Symbol.type = Symbol.for(`toa.type`);
-  Symbol.any = Symbol.for(`toa.any`);
+  Symbol.isSymbol = Symbol.for(`toa.isASymbol`);
   addSymbols2Anything();
   const maybe = maybeFactory();
   const [$Wrap, xProxy] = [WrapAnyFactory(), setProxyFactory()];
@@ -153,7 +155,7 @@ function TOAFactory() {
           ? isExcept(anything, isTypeObj) : IS(anything, ...[isTypeObj.isTypes].flat());
     }
     
-    const input = typeof anything === `symbol` ? Symbol.any : anything;
+    const input = typeof anything === `symbol` ? Symbol.isSymbol : anything;
     return shouldBe.length > 1 ? ISOneOf(input, ...shouldBe) : determineType(anything, ...shouldBe);
   }
   
@@ -169,12 +171,12 @@ function TOAFactory() {
       inputCTOR,
       isNaN,
       isInfinity,
-      sbFirstIsNothing
+      shouldBeFirstElementIsNothing
     } = processInput(input, ...shouldBe);
     shouldBe = shouldBe.length && shouldBe[0];
     
     switch (true) {
-      case sbFirstIsNothing:
+      case shouldBeFirstElementIsNothing:
         return String(input) === String(compareTo);
       case input?.[Symbol.proxy] && noShouldbe:
         return input[Symbol.proxy];
@@ -198,32 +200,32 @@ function TOAFactory() {
   function processInput(input, ...shouldBe) {
     const noShouldbe = shouldBe.length < 1;
     const compareTo = !noShouldbe && shouldBe[0];
-    const sbFirstIsNothing = !noShouldbe && isNothing(shouldBe[0]);
+    const shouldBeFirstElementIsNothing = !noShouldbe && isNothing(shouldBe[0]);
     const noInput = input === undefined || input === null;
     const inputCTOR = !noInput && Object.getPrototypeOf(input)?.constructor;
-    const isNaN = maybe({trial: _ => String(input)}) === `NaN`;
+    const isNaN = Number.isNaN(input) || maybe({trial: _ => String(input) === `NaN`});
     const isInfinity = maybe({trial: _ => String(input)}) === `Infinity`;
-    return {noInput, noShouldbe, compareTo, inputCTOR, isNaN, isInfinity, sbFirstIsNothing};
+    return {noInput, noShouldbe, compareTo, inputCTOR, isNaN, isInfinity, shouldBeFirstElementIsNothing};
   }
   
   function getResult(input, compareWith, noShouldbe, me) {
-    if (!noShouldbe && compareWith === input) { return true; }
-    if (input?.[Symbol.proxy] && compareWith === Proxy) {
-      return true;
+    switch(true) {
+      case (!noShouldbe && compareWith === input) ||
+              (input?.[Symbol.proxy] && compareWith === Proxy):
+        return true;
+      case maybe({trial: _ => String(compareWith)}) === `NaN`:
+        return String(input) === `NaN`;
+      case input?.[Symbol.toStringTag] && IS(compareWith, String):
+        return String(compareWith) === input[Symbol.toStringTag];
+      default:
+        return compareWith
+          ? maybe({trial: _ => input instanceof compareWith,}) ||
+            compareWith === me || compareWith === Object.getPrototypeOf(me) ||
+            `${compareWith?.name}` === me?.name
+          : input?.[Symbol.toStringTag] && `[object ${input?.[Symbol.toStringTag]}]` ||
+              me?.name ||
+              String(me);
     }
-    if (maybe({trial: _ => String(compareWith)}) === `NaN`) {
-      return String(input) === `NaN`;
-    }
-    if (input?.[Symbol.toStringTag] && IS(compareWith, String)) {
-      return String(compareWith) === input[Symbol.toStringTag];
-    }
-    
-    return compareWith
-      ? maybe({trial: _ => input instanceof compareWith,}) ||
-          compareWith === me || compareWith === Object.getPrototypeOf(me) ||
-          `${compareWith?.name}` === me?.name
-      : input?.[Symbol.toStringTag] && `[object ${input?.[Symbol.toStringTag]}]` || me?.name || String(me);
-    
   }
   
   function ISOneOf(obj, ...params) {
@@ -245,7 +247,6 @@ function TOAFactory() {
         return tryFn(whenError, err)
       }
     };
-    
   }
   
   function WrapAnyFactory() {

@@ -83,6 +83,7 @@ function interpolateFactory(defaultReplacer = "") {
    * @returns {string} - The interpolated string.
    */
   function replace(str, token) {
+    console.log(token);
     return str.replace(/\{(?<key>[a-z_\d]+)}/gim, getReplacerLambda(token));
   }
   
@@ -130,7 +131,7 @@ function interpolateFactory(defaultReplacer = "") {
   function interpolate(str, tokens) {
     return !tokens?.length ? str : tokens
       .filter(token => token)
-      .map(token => IS(token, Object) ? replace(str, token) : ``)
+      .map((token, i) => IS(token, Object) ? replace(str, {...token, index: `${i+1}`}) : ``)
       .join(``);
   }
 }

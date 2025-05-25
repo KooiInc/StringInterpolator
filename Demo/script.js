@@ -22,8 +22,8 @@ function demo() {
   const tableTemplatesCode = demoText.tableTemplatesCode;
   
   // let's create a table
-  const tableTemplate = `<table><caption>{caption}</caption><tr><th>prename</th><th>surname</th></tr><tbody>{rows}</tbody></table>`;
-  const tableRowTemplate =  `<tr><td>{pre}</td><td>{last}</td></tr>`;
+  const tableTemplate = `<table><caption>{caption}</caption><thead><tr><th>#</th><th>prename</th><th>surname</th></tr></thead><tbody>{rows}</tbody></table>`;
+  const tableRowTemplate =  `<tr><td>{index}</td><td>{pre}</td><td>{last}</td></tr>`;
   // the replacements (for tableRowTemplate);
   const theNames = getNamesObj();
 
@@ -67,19 +67,39 @@ function setStyling() {
       font-family: verdana;
       font-size: 0.9rem;
       border-collapse: collapse;
+      vertical-align: top;
       min-width: 500px;
+      
+      td, th {
+        padding: 2px 4px;
+        font-size: 14px;
+        height: 18px;
+      }
+      
+      td:nth-child(2n), th:nth-child(2n) { width: 200px; }
+      
+      th {
+        font-weight: bold;
+        text-align: left;
+        border-bottom: 1px solid #999;
+        background-color: #999;
+        color: #FFF;
+      }
+      
+      td:first-child, th:first-child {
+        text-align: right; padding-right: 5px;
+        min-width: 12px;
+        max-width: 36px;
+      }
+      caption {
+        border: 1px solid #ccc;
+        padding: 0.5rem;
+        font-size: 14px;
+        white-space: nowrap;
+       }
+       
+       tbody tr:nth-child(even) { background-color: #ddd; }
      }`,
-    `table caption {
-      border: 1px solid #ccc;
-      padding: 0.5rem;
-      font-size: 14px;
-      white-space: nowrap;
-     }`,
-    `table tbody tr:nth-child(even) { background-color: #ddd; }`,
-    `table td, table th { padding: 2px 4px; font-size: 14px; height: 18px}`,
-    `table th { backgroundColor: #999; color: #FFF; }`,
-    `table tr td:first-child, table tr th:first-child {text-align: right; padding-right: 0.5rem; width:50%}`,
-    `th { font-weight: bold; text-align: left; border-bottom: 1px solid #999; }`,
     `.largeArrowDown:before{
       content: '${repeat(`⬇`, 3)}';
       color:green; }`,
@@ -245,15 +265,27 @@ const theNamesTokensAsArrays = {
 const tableTemplate = ${escHTML(`
 "<table>\\
   <caption>{caption}</caption>\\
-  <tr>\\
-    <th>prename</th>\\
-    <th>surname</th>\\
-  </tr>\\
+  <thead>\\
+    <tr>\\
+      <th>#</th>\\
+      <th>prename</th>\\
+      <th>surname</th>\\
+    </tr>\\
+  </thead>\\
   <tbody>{rows}</tbody>\\
 </table>"`)};
-const tableRowTemplate = ${escHTML(`"<tr><td>{pre}</td><td>{last}</td></tr>"`)};
+const tableRowTemplate = ${escHTML(`
+"<tr>\\
+  <td>{index}</td>\\
+  <td>{pre}</td>\\
+  <td>{last}</td>\\
+</tr>"`)};
+/* ∟ Note:
+   adding {index} in the template string is optional.
+   It will be automatically replaced with the index
+   (starting with 1) of the insertion */
 
-// the tokens used for tableRowTemplate
+/* the tokens used for tableRowTemplate */
 const theNames = ${namesUsed.slice(namesUsed.indexOf(`[`), -1).trim()}</code></pre>`,
   };
 }
