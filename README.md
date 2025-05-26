@@ -1,3 +1,9 @@
+<div align="center">
+  <a href="https://bundlephobia.com/package/splat-es" rel="nofollow">
+  <img src="https://badgen.net/bundlephobia/min/splat-es"></a>
+  <a target="_blank" href="https://www.npmjs.com/package/splat-es"><img src="https://img.shields.io/npm/v/splat-es.svg?labelColor=cb3837&logo=npm&color=dcfdd9"></a>
+</div>
+
 # String interpolate utility
 
 A small string interpolator/tokenizer utility. Use it to replace tags (tokens) within template strings 
