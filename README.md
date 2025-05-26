@@ -97,5 +97,5 @@ console.log(`${[
 </script>
 ```
 
-The resulting `<table>` from the above example would be:
+The resulting `<table>` from the above example would be:<br>
 ![image](https://github.com/KooiInc/StringInterpolator/assets/836043/034d5b9c-8247-4f69-af76-503594ec6622)
