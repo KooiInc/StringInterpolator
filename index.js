@@ -1,7 +1,7 @@
 import IS
   from "https://cdn.jsdelivr.net/gh/KooiInc/typeofAnything@latest/typeofany.module.min.js";
 
-const interpolateDefault = interpolateFactory(null);
+const interpolateDefault = interpolateFactory();
 const interpolateClear = interpolateFactory(``);
 
 /**
