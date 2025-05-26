@@ -37,7 +37,7 @@ The parameter(s) can be either
 Multiple replacement values result in multiple strings.
 
 ## Importing/loading
-**_Note_**: The module is also available as [npm package](https://www.npmjs.com/package/es-string-interpolator).
+**_Note_**: The module is also available as [npm package](https://www.npmjs.com/package/js-fuse) (js-fuse).
 
 ### Import as module ("Interpolate.module.js")
 

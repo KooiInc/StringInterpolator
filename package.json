@@ -1,6 +1,6 @@
 {
-  "name": "es-string-interpolator",
-  "version": "1.0.5",
+  "name": "js-fuse",
+  "version": "1.0.0",
   "description": "a small module for ES string interpolation",
   "main": "Interpolate.module.js",
   "scripts": {
@@ -9,6 +9,6 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KooiInc/StringInterpolator.git"
+    "url": "git+https://codeberg.org/KooiInc/JS-Interpolate.git"
   }
 }
