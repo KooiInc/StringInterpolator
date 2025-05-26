@@ -10,8 +10,5 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KooiInc/StringInterpolator.git"
-  },
-  "dependencies": {
-    "typeofanything": "latest"
   }
 }
