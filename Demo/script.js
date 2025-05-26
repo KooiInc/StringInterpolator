@@ -2,7 +2,7 @@
 // $ etc. @https://github.com/KooiInc/SBHelpers
 // 20240612
 // -----------------------------------------------------------------------
-import {default as interpolate, interpolateFactory} from "../Interpolate.module.js";
+import {default as interpolate, interpolateFactory} from "../index.js";
 const tokenize = Symbol.for("interpolate");
 const tokenize$ = Symbol.for("interpolate$");
 // try out in developer screen
@@ -111,6 +111,9 @@ function setStyling() {
     `a:hover { text-decoration:underline; }`,
     `a[target]:before { color:rgba(0,0,238,0.7);font-size: 1.1rem;vertical-align:bottom }`,
     `a[target="_blank"]:before {content: '\\2197'' '; }`,
+    `a[target].cbBacklink {
+      &:before { content: url(./codebergicon.ico)' '; vertical-align: middle;}
+     }`,
     `a[target="_top"]:before {content: '\\21BA'' '; }`,
     `ul#log2screen { margin: 0 auto; max-width: 40vw; }`,
     `#log2screen pre.syntax {
@@ -173,9 +176,8 @@ function demoTexts() {
   const isStackblitz = /stackblitz/i.test(location.href);
   const links = [
       isStackblitz ? `!!<a target="_top" href="https://stackblitz.com/@KooiInc">All Stackblitz projects</a>` : `!!`,
-      `!!<a target="${isStackblitz ? `_blank` : `_top`}" href="https://github.com/KooiInc/StringInterpolator"
-          >Github Repository</a>`,
-      `!!<a target="_blank" href="https://github.com/KooiInc/es-string-fiddler">Used  by es-string-fiddler (Github)</a>`
+      `!!<a class="cbBacklink" target="${isStackblitz ? `_blank` : `_top`}" href="https://codeberg.org/KooiInc/JS-Interpolate"
+          >Back to repository</a>`
     ];
   const replacement = {blah: `FOOBLAH`, bar: `BARRED`};
   const someStr = `Blah [{blah}] and blah and {foo}, but then again [\\{bar\\} | {bar}]`;
