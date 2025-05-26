@@ -1,6 +1,6 @@
 {
   "name": "splat-es",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a small module for ES string interpolation",
   "main": "Interpolate.module.js",
   "scripts": {
@@ -9,6 +9,6 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://codeberg.org/KooiInc/JS-Interpolate.git"
+    "url": "https://codeberg.org/KooiInc/JS-Interpolate.git"
   }
 }
