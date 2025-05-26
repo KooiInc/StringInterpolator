@@ -1,8 +1,9 @@
 {
   "name": "splat-es",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "a small module for ES string interpolation",
   "main": "Interpolate.module.js",
+  "license": "GPL-3.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
