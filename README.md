@@ -18,7 +18,7 @@ Besides the three exported functions, on initialization `String.prototype` is ex
 `Symbol.for("interpolate")` and `Symbol.for("interpolate$")`, the latter being the method that 
 clears missing replacement values (replaces them with `""`).
 
-Check the **[DEMO](https://kooiinc.codeberg.page/StringInterpolator/Demo/)**.
+Check the **[DEMO](https://kooiinc.codeberg.page/JS-Interpolate/Demo/)**.
 
 The StringInterpolator module is used in the [es-string-fiddler](https://github.com/KooiInc/es-string-fiddler) module.
 
