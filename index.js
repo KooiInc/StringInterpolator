@@ -1,5 +1,4 @@
-import IS
-  from "https://cdn.jsdelivr.net/gh/KooiInc/typeofAnything@latest/typeofany.module.min.js";
+import IS from "./toaFactory.js";
 
 const interpolateDefault = interpolateFactory();
 const interpolateClear = interpolateFactory(``);

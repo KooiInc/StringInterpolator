@@ -227,20 +227,24 @@ const tokenize$ = Symbol.for("interpolate$");
 // now we can use the 'symbolic extensions' (named tokenize/tokenize$)
 // [tokenize]: keep tokens with empty values intact
 templateStringEx[tokenize](
+  {wrld: "WORLD"},
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} ); /* result => \n${
   " hello {wrld} {univrs}\n"[tokenize](
+    {wrld: "WORLD (Note: missing tokens are ignored)"},
     {wrld: "WORLD", univrs: null},
     {wrld: null, univrs: "UNIVERSE"},
     {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
 
 // [tokenize$]: cleanup empty values
 templateStringEx[tokenize$](
+  {univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} );  /* result =>\n${
   " hello {wrld} {univrs}\n"[tokenize$](
+    {univrs: "UNIVERSE (Note: missing tokens are ignored)"},
     {wrld: "WORLD", univrs: null},
     {wrld: null, univrs: "UNIVERSE"},
     {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/

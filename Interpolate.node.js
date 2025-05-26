@@ -1,6 +1,6 @@
-import IS from "typeofanything";
+import IS from "./toaFactory.js";
 
-const interpolateDefault = interpolateFactory(null);
+const interpolateDefault = interpolateFactory();
 const interpolateClear = interpolateFactory(``);
 
 /**
