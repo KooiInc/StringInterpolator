@@ -44,7 +44,7 @@ Multiple replacement values result in multiple strings.
 
 ### Import as module ("Interpolate.module.js")
 
-```javascript
+```html
 <script type="module">
   import { default as interpolate, interpolateClear, } 
     from "[path/to]/Interpolate.module.js]";
@@ -70,7 +70,7 @@ console.log(`${[
 
 ### Load from `window.interpolate` ("Interpolate.browser.js")
 
-```javascript
+```html
 <script src="[path/to]/Interpolate.browser.js]"></script>
 <!-- example -->
 <script>
@@ -99,5 +99,3 @@ console.log(`${[
 
 The resulting `<table>` from the above example would be:
 ![image](https://github.com/KooiInc/StringInterpolator/assets/836043/034d5b9c-8247-4f69-af76-503594ec6622)
-
-
