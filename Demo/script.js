@@ -1,7 +1,7 @@
-// gist @https://gist.github.com/KooiInc/5ce3520c54f19e27351ec9081318dff4
 // $ etc. @https://github.com/KooiInc/SBHelpers
 // 20240612
 // -----------------------------------------------------------------------
+checkCBPage();
 import {default as interpolate, interpolateFactory} from "../index.js";
 const tokenize = Symbol.for("interpolate");
 const tokenize$ = Symbol.for("interpolate$");
@@ -53,18 +53,21 @@ function demo() {
     last: `Peterson,Ali,Johnson,Clinton,Bar,Foo,邓,Зеленський,0,10,<span class="point left"></span> missing value,`
       .split(`,`).map(v => !v.length ? null : v)
   }
-
+  
   // show me the money!
   const table1 = tableTemplate[tokenize]({
     caption: `<code>tableRowTemplate[tokenize]</code> using <code>theNames</code>`,
-    rows: tableRowTemplate[tokenize](...theNames) } );
+    rows: tableRowTemplate[tokenize](...theNames)
+  });
   const table2 = tableTemplate[tokenize]({
     caption: `<code>tableRowTemplate[tokenize$]</code> (empty/invalid values => empty string)`,
-    rows: tableRowTemplate[tokenize$](...theNamesClear) } );
+    rows: tableRowTemplate[tokenize$](...theNamesClear)
+  });
   const table3 = tableTemplate[tokenize]({
     caption: `<code>tableRowTemplate[tokenize]</code> token values are arrays`,
-    rows: tableRowTemplate[tokenize](theNamesTokensAsArrays) } );
-  log(`!!${tableTemplatesCode}`, `!!${table1}`, `!!${table2}`, `!!${code4Array}`, `!!${table3}` );
+    rows: tableRowTemplate[tokenize](theNamesTokensAsArrays)
+  });
+  log(`!!${tableTemplatesCode}`, `!!${table1}`, `!!${table2}`, `!!${code4Array}`, `!!${table3}`);
   Prism.highlightAll();
   createContent();
 }
@@ -182,28 +185,31 @@ function getNamesObj() {
     {pre: `zero (0)`, last: 0},
     {pre: `Row`, last: 10},
     {pre: `replacement-is-empty-string`, last: ''},     // ᐊ Empty string value IS replaced
-    {pre: `<b class="notifyHeader">Invalid/missing token keys/values are kept</b>`, last: `<span class="largeArrowDown"></span>`},
+    {
+      pre: `<b class="notifyHeader">Invalid/missing token keys/values are kept</b>`,
+      last: `<span class="largeArrowDown"></span>`
+    },
     // if !defaultReplacer ...
-    {pre: `replacement-Is-array`, last: [1,2,3]},       // ᐊ Array value IS NOT replaced/
+    {pre: `replacement-Is-array`, last: [1, 2, 3]},       // ᐊ Array value IS NOT replaced/
     {pre: `replacement-Is-null`, last: null},           // ᐊ null value IS NOT replaced
-    {pre: `replacement-Is-object`, last: {} },          // ᐊ Object value IS NOT replaced
+    {pre: `replacement-Is-object`, last: {}},          // ᐊ Object value IS NOT replaced
     {pre: `replacement-Is-undefined`, last: undefined}, // ᐊ undefined value IS NOT replaced
     {last: `key-pre-does-not-exist`},                   // ᐊ undefined value IS NOT replaced
     {pre: `key-last-does-not-exist`},                   // ᐊ incomplete object, what exists is replaced
     {some: `nothing-to-replace`, name: `nothing`},      // ᐊ non existing keys, tokens ignored
     {},                                                 // ᐊ empty object, tokens ignored
     [`nothing`, `nada`, `zip`, `没有什么`,               // ᐊ replacement not an Object, tokens ignored
-     `niente`, `rien`, `ничего`]
+      `niente`, `rien`, `ничего`]
   ];
 }
 
 function demoTexts() {
   const isStackblitz = /stackblitz/i.test(location.href);
   const links = [
-      isStackblitz ? `!!<a target="_top" href="https://stackblitz.com/@KooiInc">All Stackblitz projects</a>` : `!!`,
-      `!!<a class="cbBacklink" target="${isStackblitz ? `_blank` : `_top`}" href="https://codeberg.org/KooiInc/JS-Interpolate"
+    isStackblitz ? `!!<a target="_top" href="https://stackblitz.com/@KooiInc">All Stackblitz projects</a>` : `!!`,
+    `!!<a class="cbBacklink" target="${isStackblitz ? `_blank` : `_top`}" href="https://codeberg.org/KooiInc/JS-Interpolate"
           >Back to repository</a>`
-    ];
+  ];
   const replacement = {blah: `FOOBLAH`, bar: `BARRED`};
   const someStr = `Blah [{blah}] and blah and {foo}, but then again [\\{bar\\} | {bar}]`;
   const namesUsed = getNamesObj.toString()
@@ -238,10 +244,10 @@ insert(templateStringEx,
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} );  /* result =>\n${
-  insert(" hello {wrld} {univrs}\n",
-    {wrld: "WORLD", univrs: null},
-    {wrld: null, univrs: "UNIVERSE"},
-    {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
+        insert(" hello {wrld} {univrs}\n",
+          {wrld: "WORLD", univrs: null},
+          {wrld: null, univrs: "UNIVERSE"},
+          {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
 
 // On importing interpolateFactory String.prototype
 // was extended using 2 Symbols. Here we
@@ -256,11 +262,11 @@ templateStringEx[tokenize](
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} ); /* result => \n${
-  " hello {wrld} {univrs}\n"[tokenize](
-    {wrld: "WORLD (Note: missing tokens are ignored)"},
-    {wrld: "WORLD", univrs: null},
-    {wrld: null, univrs: "UNIVERSE"},
-    {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
+        " hello {wrld} {univrs}\n"[tokenize](
+          {wrld: "WORLD (Note: missing tokens are ignored)"},
+          {wrld: "WORLD", univrs: null},
+          {wrld: null, univrs: "UNIVERSE"},
+          {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
 
 // [tokenize$]: remove tokens without values (replace with empty string)
 templateStringEx[tokenize$](
@@ -268,11 +274,11 @@ templateStringEx[tokenize$](
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} );  /* result =>\n${
-  " hello {wrld} {univrs}\n"[tokenize$](
-    {univrs: "UNIVERSE (Note: missing tokens are cleared)"},
-    {wrld: "WORLD", univrs: null},
-    {wrld: null, univrs: "UNIVERSE"},
-    {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
+        " hello {wrld} {univrs}\n"[tokenize$](
+          {univrs: "UNIVERSE (Note: missing tokens are cleared)"},
+          {wrld: "WORLD", univrs: null},
+          {wrld: null, univrs: "UNIVERSE"},
+          {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
     
 // escaped "{" and/or "}" and non existing token values are ignored
 const replacement = { blah: "FOOBLAH", bar: "BARRED" };
@@ -326,5 +332,11 @@ function createContent() {
   $(`<div class="container">`).append($(`#log2screen`));
   $.editCssRule(`.bottomSpace { height: ${$.node(`.container`).clientHeight}px; }`);
   $(`#log2screen`).afterMe(`<div class="bottomSpace">`);
+}
+
+function checkCBPage() {
+  if (location.href.includes(`codeberg.page`)) {
+    $(`head`).append(`<base href="https://kooiinc.codeberg.page/JS-Interpolate/">`);
+  }
 }
 /* endregion indexCreatr */
