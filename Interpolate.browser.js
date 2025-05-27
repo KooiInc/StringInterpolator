@@ -24,10 +24,9 @@ window.interpolate = {
  * @param {string|number} defaultReplacer - Default value to use for missing tokens.
  * @returns {Function} - The interpolation function.
  */
-function interpolateFactory(defaultReplacer = "") {
+function interpolateFactory(defaultReplacer) {
   defaultReplacer = IS(defaultReplacer, String, Number) ?
     String(defaultReplacer) : undefined;
-  
   /**
    * Main interpolation function.
    * @param {string} str - The string with placeholders.
@@ -127,10 +126,13 @@ function interpolateFactory(defaultReplacer = "") {
    * @returns {string} - The interpolated string.
    */
   function interpolate(str, tokens) {
-    return !tokens?.length ? str : tokens
-      .filter(token => token)
-      .map((token, i) => IS(token, Object) ? replace(str, {...token, index: i + 1}) : ``)
+    const injected = !tokens?.length ? str : tokens
+      .filter(token => IS(token, Object))
+      .map((token, i) => replace(str, {...token, index: i + 1}))
       .join(``);
+    
+    return IS(defaultReplacer, undefined)
+      ? injected : injected.replace(/\{[a-z_\d].+\}/gim, String(defaultReplacer));
   }
 }
 
