@@ -141,7 +141,16 @@ function setStyling() {
     `a[target]:before { color:rgba(0,0,238,0.7);font-size: 1.1rem;vertical-align:bottom }`,
     `a[target="_blank"]:before {content: '\\2197'' '; }`,
     `a[target].cbBacklink {
-      &:before { content: url(./codebergicon.ico)' '; vertical-align: middle;}
+      &:before {
+        content: url(./codebergicon.ico)' ';
+        vertical-align: middle;
+      }
+     }`,
+    `a[target].ghBacklink {
+      &:before {
+        content: url(./githubicon.png)' ';
+        vertical-align: middle;
+      }
      }`,
     `a[target="_top"]:before {content: '\\21BA'' '; }`,
     `ul#log2screen { margin: 0 auto; max-width: 40vw; }`,
@@ -204,11 +213,13 @@ function getNamesObj() {
 }
 
 function demoTexts() {
-  const isStackblitz = /stackblitz/i.test(location.href);
+  const isGithub = /github/i.test(location.href);
+  const back2repo = `(back to) repository`;
+  const isLocal = /localhost/.test(location.href);
   const links = [
-    isStackblitz ? `!!<a target="_top" href="https://stackblitz.com/@KooiInc">All Stackblitz projects</a>` : `!!`,
-    `!!<a class="cbBacklink" target="${isStackblitz ? `_blank` : `_top`}" href="https://codeberg.org/KooiInc/JS-Interpolate"
-          >Back to repository</a>`
+      isGithub
+        ? `!!<a class="ghBacklink "target="_top" href="https://github.com/KooiInc/StringInterpolator">${back2repo}</a>`
+        : `!!<a class="cbBacklink" target="_top" href="https://codeberg.org/KooiInc/JS-Interpolate">${back2repo}</a>`
   ];
   const replacement = {blah: `FOOBLAH`, bar: `BARRED`};
   const someStr = `Blah [{blah}] and blah and {foo}, but then again [\\{bar\\} | {bar}]`;
@@ -218,7 +229,7 @@ function demoTexts() {
     .replace(/\n\s+]/, `\n]`)
     .replace(/</g, `&lt;`);
   return {
-    links,
+    links: !isLocal && links || [`!!LOCAL TEST`],
     preSyntax: `<div class="readme">The module exports the factory itself (<code>interpolateFactory</code>),
        the <code>interpolate</code> function (default) and the <code>interpolateClear</code> function (which
        clears empty placeholders).</div>
