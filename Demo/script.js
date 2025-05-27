@@ -2,7 +2,7 @@
 // $ etc. @https://github.com/KooiInc/SBHelpers
 // 20240612
 // -----------------------------------------------------------------------
-import {default as interpolate, interpolateFactory} from "../index.js";
+import {default as interpolate, interpolateFactory} from "../interpolate.module.js";
 const tokenize = Symbol.for("interpolate");
 const tokenize$ = Symbol.for("interpolate$");
 // try out in developer screen
@@ -22,19 +22,35 @@ function demo() {
   const tableTemplatesCode = demoText.tableTemplatesCode;
   
   // let's create a table
-  const tableTemplate = `<table><caption>{caption}</caption><thead><tr><th>#</th><th>prename</th><th>surname</th></tr></thead><tbody>{rows}</tbody></table>`;
-  const tableRowTemplate =  `<tr><td>{index}</td><td>{pre}</td><td>{last}</td></tr>`;
+  const tableTemplate = `
+    <table>
+      <caption>{caption}</caption>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>prename</th>
+          <th>surname</th>
+        </tr>
+      </thead>
+      <tbody>{rows}</tbody>
+    </table>`;
+  const tableRowTemplate =  `
+    <tr>
+      <td>{index}</td>
+      <td>{pre}</td>
+      <td>{last}</td>
+    </tr>`;
   // the replacements (for tableRowTemplate);
   const theNames = getNamesObj();
 
   setStyling();
   const theNamesClear = theNames.map(row =>
-    !/ignored/i.test(row.pre) && row.pre?.startsWith(`<b`)
-       ? {...row, pre: `<b class="notifyHeader">Cleared values</b>`} : row);
+    !/ignored/i.test(row.pre) && /Invalid\/missing/.test(row.pre)
+       ? {...row, pre: `<b class="notifyHeader">Invalid/missing token keys/values are cleared</b>`} : row);
   const theNamesTokensAsArrays = {
-    pre: `Mary,Muhammed,Missy,Hillary,Foo,Bar,小平,Володимир,zero (0),Row,,missing value =>`
+    pre: `Mary,Muhammed,Missy,Hillary,Foo,Bar,小平,Володимир,zero (0),Row,,missing value <span class="point right"></span>`
       .split(`,`).map(v => !v.length ? undefined : v),
-    last: `Peterson,Ali,Johnson,Clinton,Bar,Foo,邓,Зеленський,0,10,<= missing value,`
+    last: `Peterson,Ali,Johnson,Clinton,Bar,Foo,邓,Зеленський,0,10,<span class="point left"></span> missing value,`
       .split(`,`).map(v => !v.length ? null : v)
   }
 
@@ -69,6 +85,7 @@ function setStyling() {
       border-collapse: collapse;
       vertical-align: top;
       min-width: 500px;
+      max-width: 700px;
       
       td, th {
         padding: 2px 4px;
@@ -76,7 +93,7 @@ function setStyling() {
         height: 18px;
       }
       
-      td:nth-child(2n), th:nth-child(2n) { width: 200px; }
+      /*td:nth-child(2n), th:nth-child(2n) { width: 200px; }*/
       
       th {
         font-weight: bold;
@@ -88,8 +105,7 @@ function setStyling() {
       
       td:first-child, th:first-child {
         text-align: right; padding-right: 5px;
-        min-width: 12px;
-        max-width: 36px;
+        width: 24px;
       }
       caption {
         border: 1px solid #ccc;
@@ -102,7 +118,17 @@ function setStyling() {
      }`,
     `.largeArrowDown:before{
       content: '${repeat(`⬇`, 3)}';
-      color:green; }`,
+      color: red; }`,
+    `span.point:before {
+      font-weight: bold;
+      color: red;
+      content: '➜';
+      vertical-align: middle;
+    }`,
+    `span.point.left:before {
+      display: inline-block;
+      transform: rotate(-180deg);
+     }`,
     `b.notifyHeader { color: green; }`,
     `li.head {margin-left: -2rem !important;}`,
     `li.head table {margin-top: 1.2rem;}`,
@@ -156,16 +182,15 @@ function getNamesObj() {
     {pre: `zero (0)`, last: 0},
     {pre: `Row`, last: 10},
     {pre: `replacement-is-empty-string`, last: ''},     // ᐊ Empty string value IS replaced
-    {pre: `<b class="notifyHeader">Not replaced</b>`, last: `<span class="largeArrowDown"></span>`},
+    {pre: `<b class="notifyHeader">Invalid/missing token keys/values are kept</b>`, last: `<span class="largeArrowDown"></span>`},
     // if !defaultReplacer ...
     {pre: `replacement-Is-array`, last: [1,2,3]},       // ᐊ Array value IS NOT replaced/
     {pre: `replacement-Is-null`, last: null},           // ᐊ null value IS NOT replaced
     {pre: `replacement-Is-object`, last: {} },          // ᐊ Object value IS NOT replaced
     {pre: `replacement-Is-undefined`, last: undefined}, // ᐊ undefined value IS NOT replaced
-    {pre: `<b class="notifyHeader">Ignored</b>`, last: `<span class="largeArrowDown"></span>`},
     {last: `key-pre-does-not-exist`},                   // ᐊ undefined value IS NOT replaced
     {pre: `key-last-does-not-exist`},                   // ᐊ incomplete object, what exists is replaced
-    {some: `nothing-to-replace`, name: `nothing`},      // ᐊ non relevant keys, tokens ignored
+    {some: `nothing-to-replace`, name: `nothing`},      // ᐊ non existing keys, tokens ignored
     {},                                                 // ᐊ empty object, tokens ignored
     [`nothing`, `nada`, `zip`, `没有什么`,               // ᐊ replacement not an Object, tokens ignored
      `niente`, `rien`, `ничего`]
@@ -237,14 +262,14 @@ templateStringEx[tokenize](
     {wrld: null, univrs: "UNIVERSE"},
     {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
 
-// [tokenize$]: cleanup empty values
+// [tokenize$]: remove tokens without values (replace with empty string)
 templateStringEx[tokenize$](
   {univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} );  /* result =>\n${
   " hello {wrld} {univrs}\n"[tokenize$](
-    {univrs: "UNIVERSE (Note: missing tokens are ignored)"},
+    {univrs: "UNIVERSE (Note: missing tokens are cleared)"},
     {wrld: "WORLD", univrs: null},
     {wrld: null, univrs: "UNIVERSE"},
     {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
@@ -261,9 +286,9 @@ someStr[tokenize$](replacement); => "${someStr[tokenize$](replacement)}"</code><
 // to fill the next table, a single object with array values is used
 const theNamesTokensAsArrays = {
   pre: [ "Mary", "Muhammed", "Missy", "Hillary", "Foo", "Bar",
-        "小平", "Володимир", "zero (0)", "Row", null, "missing value =>" ],
+        "小平", "Володимир", "zero (0)", "Row", null, "missing value" ],
   last: [ "Peterson", "Ali", "Johnson", "Clinton", "Bar", "Foo",
-          "邓", "Зеленський", "0", "10", "<= missing value", null ]
+          "邓", "Зеленський", "0", "10", "missing value", null ]
 };</code>`,
     
     tableTemplatesCode: `<br><pre class="syntax language-javascript line-numbers"><code class="language-javascript">
