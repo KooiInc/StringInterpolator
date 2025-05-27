@@ -14,14 +14,12 @@ The module also exports the `interpolateClear` function and the factory function
 `interpolateClear` Replaces missing replacement values (e.g. `{token1: null}`) 
 with a an empty string.
 
-Besides the three exported functions, on initialization `String.prototype` is extended with two `Symbol`s: 
+Besides the three exported functions, on initialization `String.prototype` is extended with two Symbols: 
 `Symbol.for("interpolate")` and `Symbol.for("interpolate$")`, the latter being the method that 
 clears missing replacement values (replaces them with `""`).
 
 Check the **[DEMO](https://kooiinc.github.io/StringInterpolator/Demo)**, or the (forkable) 
 demo at **[StackBlitz](https://stackblitz.com/edit/web-platform-nmqf7o?file=script.js)**.
-
-The StringInterpolator module is used in the [es-string-fiddler](https://github.com/KooiInc/es-string-fiddler) module.
 
 ## Syntax
 - `const myInterpolator = interpolateFactory( [defaultReplacer: string (default "")] )`
@@ -44,7 +42,7 @@ Multiple replacement values result in multiple strings.
 
 ### Import as module ("Interpolate.module.js")
 
-```javascript
+```html
 <script type="module">
   import { default as interpolate, interpolateClear, } 
     from "[path/to]/Interpolate.module.js]";
@@ -70,7 +68,7 @@ console.log(`${[
 
 ### Load from `window.interpolate` ("Interpolate.browser.js")
 
-```javascript
+```html
 <script src="[path/to]/Interpolate.browser.js]"></script>
 <!-- example -->
 <script>
@@ -97,7 +95,5 @@ console.log(`${[
 </script>
 ```
 
-The resulting `<table>` from the above example would be:
+The resulting `<table>` from the above example would be:<br>
 ![image](https://github.com/KooiInc/StringInterpolator/assets/836043/034d5b9c-8247-4f69-af76-503594ec6622)
-
-

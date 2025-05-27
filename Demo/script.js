@@ -1,15 +1,15 @@
-// gist @https://gist.github.com/KooiInc/5ce3520c54f19e27351ec9081318dff4
 // $ etc. @https://github.com/KooiInc/SBHelpers
 // 20240612
 // -----------------------------------------------------------------------
-import {default as interpolate, interpolateFactory} from "../Interpolate.module.js";
+const { $, logFactory,  } =
+  await import("https://cdn.jsdelivr.net/gh/KooiInc/SBHelpers/index.browser.bundled.js");
+checkCBPage();
+import {default as interpolate, interpolateFactory} from "../index.js";
 const tokenize = Symbol.for("interpolate");
 const tokenize$ = Symbol.for("interpolate$");
 // try out in developer screen
 window.tokenize = tokenize;
 window.interpolate = interpolate;
-const { $, logFactory,  } =
-  await import("https://cdn.jsdelivr.net/gh/KooiInc/SBHelpers/index.browser.bundled.js");
 const { log } = logFactory();
 const insert = interpolateFactory("¡no value!");
 const demoText = demoTexts();
@@ -22,33 +22,52 @@ function demo() {
   const tableTemplatesCode = demoText.tableTemplatesCode;
   
   // let's create a table
-  const tableTemplate = `<table><caption>{caption}</caption><thead><tr><th>#</th><th>prename</th><th>surname</th></tr></thead><tbody>{rows}</tbody></table>`;
-  const tableRowTemplate =  `<tr><td>{index}</td><td>{pre}</td><td>{last}</td></tr>`;
+  const tableTemplate = `
+    <table>
+      <caption>{caption}</caption>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>prename</th>
+          <th>surname</th>
+        </tr>
+      </thead>
+      <tbody>{rows}</tbody>
+    </table>`;
+  const tableRowTemplate =  `
+    <tr>
+      <td>{index}</td>
+      <td>{pre}</td>
+      <td>{last}</td>
+    </tr>`;
   // the replacements (for tableRowTemplate);
   const theNames = getNamesObj();
 
   setStyling();
   const theNamesClear = theNames.map(row =>
-    !/ignored/i.test(row.pre) && row.pre?.startsWith(`<b`)
-       ? {...row, pre: `<b class="notifyHeader">Cleared values</b>`} : row);
+    !/ignored/i.test(row.pre) && /Invalid\/missing/.test(row.pre)
+       ? {...row, pre: `<b class="notifyHeader">Invalid/missing token keys/values are cleared</b>`} : row);
   const theNamesTokensAsArrays = {
-    pre: `Mary,Muhammed,Missy,Hillary,Foo,Bar,小平,Володимир,zero (0),Row,,missing value =>`
+    pre: `Mary,Muhammed,Missy,Hillary,Foo,Bar,小平,Володимир,zero (0),Row,,missing value <span class="point right"></span>`
       .split(`,`).map(v => !v.length ? undefined : v),
-    last: `Peterson,Ali,Johnson,Clinton,Bar,Foo,邓,Зеленський,0,10,<= missing value,`
+    last: `Peterson,Ali,Johnson,Clinton,Bar,Foo,邓,Зеленський,0,10,<span class="point left"></span> missing value,`
       .split(`,`).map(v => !v.length ? null : v)
   }
-
+  
   // show me the money!
   const table1 = tableTemplate[tokenize]({
     caption: `<code>tableRowTemplate[tokenize]</code> using <code>theNames</code>`,
-    rows: tableRowTemplate[tokenize](...theNames) } );
+    rows: tableRowTemplate[tokenize](...theNames)
+  });
   const table2 = tableTemplate[tokenize]({
     caption: `<code>tableRowTemplate[tokenize$]</code> (empty/invalid values => empty string)`,
-    rows: tableRowTemplate[tokenize$](...theNamesClear) } );
+    rows: tableRowTemplate[tokenize$](...theNamesClear)
+  });
   const table3 = tableTemplate[tokenize]({
     caption: `<code>tableRowTemplate[tokenize]</code> token values are arrays`,
-    rows: tableRowTemplate[tokenize](theNamesTokensAsArrays) } );
-  log(`!!${tableTemplatesCode}`, `!!${table1}`, `!!${table2}`, `!!${code4Array}`, `!!${table3}` );
+    rows: tableRowTemplate[tokenize](theNamesTokensAsArrays)
+  });
+  log(`!!${tableTemplatesCode}`, `!!${table1}`, `!!${table2}`, `!!${code4Array}`, `!!${table3}`);
   Prism.highlightAll();
   createContent();
 }
@@ -69,6 +88,7 @@ function setStyling() {
       border-collapse: collapse;
       vertical-align: top;
       min-width: 500px;
+      max-width: 700px;
       
       td, th {
         padding: 2px 4px;
@@ -76,7 +96,7 @@ function setStyling() {
         height: 18px;
       }
       
-      td:nth-child(2n), th:nth-child(2n) { width: 200px; }
+      /*td:nth-child(2n), th:nth-child(2n) { width: 200px; }*/
       
       th {
         font-weight: bold;
@@ -88,8 +108,7 @@ function setStyling() {
       
       td:first-child, th:first-child {
         text-align: right; padding-right: 5px;
-        min-width: 12px;
-        max-width: 36px;
+        width: 24px;
       }
       caption {
         border: 1px solid #ccc;
@@ -102,7 +121,17 @@ function setStyling() {
      }`,
     `.largeArrowDown:before{
       content: '${repeat(`⬇`, 3)}';
-      color:green; }`,
+      color: red; }`,
+    `span.point:before {
+      font-weight: bold;
+      color: red;
+      content: '➜';
+      vertical-align: middle;
+    }`,
+    `span.point.left:before {
+      display: inline-block;
+      transform: rotate(-180deg);
+     }`,
     `b.notifyHeader { color: green; }`,
     `li.head {margin-left: -2rem !important;}`,
     `li.head table {margin-top: 1.2rem;}`,
@@ -111,6 +140,18 @@ function setStyling() {
     `a:hover { text-decoration:underline; }`,
     `a[target]:before { color:rgba(0,0,238,0.7);font-size: 1.1rem;vertical-align:bottom }`,
     `a[target="_blank"]:before {content: '\\2197'' '; }`,
+    `a[target].cbBacklink {
+      &:before {
+        content: url(./codebergicon.ico)' ';
+        vertical-align: middle;
+      }
+     }`,
+    `a[target].ghBacklink {
+      &:before {
+        content: url(./githubicon.png)' ';
+        vertical-align: middle;
+      }
+     }`,
     `a[target="_top"]:before {content: '\\21BA'' '; }`,
     `ul#log2screen { margin: 0 auto; max-width: 40vw; }`,
     `#log2screen pre.syntax {
@@ -153,30 +194,33 @@ function getNamesObj() {
     {pre: `zero (0)`, last: 0},
     {pre: `Row`, last: 10},
     {pre: `replacement-is-empty-string`, last: ''},     // ᐊ Empty string value IS replaced
-    {pre: `<b class="notifyHeader">Not replaced</b>`, last: `<span class="largeArrowDown"></span>`},
+    {
+      pre: `<b class="notifyHeader">Invalid/missing token keys/values are kept</b>`,
+      last: `<span class="largeArrowDown"></span>`
+    },
     // if !defaultReplacer ...
-    {pre: `replacement-Is-array`, last: [1,2,3]},       // ᐊ Array value IS NOT replaced/
+    {pre: `replacement-Is-array`, last: [1, 2, 3]},       // ᐊ Array value IS NOT replaced/
     {pre: `replacement-Is-null`, last: null},           // ᐊ null value IS NOT replaced
-    {pre: `replacement-Is-object`, last: {} },          // ᐊ Object value IS NOT replaced
+    {pre: `replacement-Is-object`, last: {}},          // ᐊ Object value IS NOT replaced
     {pre: `replacement-Is-undefined`, last: undefined}, // ᐊ undefined value IS NOT replaced
-    {pre: `<b class="notifyHeader">Ignored</b>`, last: `<span class="largeArrowDown"></span>`},
     {last: `key-pre-does-not-exist`},                   // ᐊ undefined value IS NOT replaced
     {pre: `key-last-does-not-exist`},                   // ᐊ incomplete object, what exists is replaced
-    {some: `nothing-to-replace`, name: `nothing`},      // ᐊ non relevant keys, tokens ignored
+    {some: `nothing-to-replace`, name: `nothing`},      // ᐊ non existing keys, tokens ignored
     {},                                                 // ᐊ empty object, tokens ignored
     [`nothing`, `nada`, `zip`, `没有什么`,               // ᐊ replacement not an Object, tokens ignored
-     `niente`, `rien`, `ничего`]
+      `niente`, `rien`, `ничего`]
   ];
 }
 
 function demoTexts() {
-  const isStackblitz = /stackblitz/i.test(location.href);
+  const isGithub = /github/i.test(location.href);
+  const back2repo = `(back to) repository`;
+  const isLocal = /localhost/.test(location.href);
   const links = [
-      isStackblitz ? `!!<a target="_top" href="https://stackblitz.com/@KooiInc">All Stackblitz projects</a>` : `!!`,
-      `!!<a target="${isStackblitz ? `_blank` : `_top`}" href="https://github.com/KooiInc/StringInterpolator"
-          >Github Repository</a>`,
-      `!!<a target="_blank" href="https://github.com/KooiInc/es-string-fiddler">Used  by es-string-fiddler (Github)</a>`
-    ];
+      isGithub
+        ? `!!<a class="ghBacklink "target="_top" href="https://github.com/KooiInc/StringInterpolator">${back2repo}</a>`
+        : `!!<a class="cbBacklink" target="_top" href="https://codeberg.org/KooiInc/JS-Interpolate">${back2repo}</a>`
+  ];
   const replacement = {blah: `FOOBLAH`, bar: `BARRED`};
   const someStr = `Blah [{blah}] and blah and {foo}, but then again [\\{bar\\} | {bar}]`;
   const namesUsed = getNamesObj.toString()
@@ -185,7 +229,7 @@ function demoTexts() {
     .replace(/\n\s+]/, `\n]`)
     .replace(/</g, `&lt;`);
   return {
-    links,
+    links: !isLocal && links || [`!!LOCAL TEST`],
     preSyntax: `<div class="readme">The module exports the factory itself (<code>interpolateFactory</code>),
        the <code>interpolate</code> function (default) and the <code>interpolateClear</code> function (which
        clears empty placeholders).</div>
@@ -211,10 +255,10 @@ insert(templateStringEx,
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} );  /* result =>\n${
-  insert(" hello {wrld} {univrs}\n",
-    {wrld: "WORLD", univrs: null},
-    {wrld: null, univrs: "UNIVERSE"},
-    {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
+        insert(" hello {wrld} {univrs}\n",
+          {wrld: "WORLD", univrs: null},
+          {wrld: null, univrs: "UNIVERSE"},
+          {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
 
 // On importing interpolateFactory String.prototype
 // was extended using 2 Symbols. Here we
@@ -225,23 +269,27 @@ const tokenize$ = Symbol.for("interpolate$");
 // now we can use the 'symbolic extensions' (named tokenize/tokenize$)
 // [tokenize]: keep tokens with empty values intact
 templateStringEx[tokenize](
+  {wrld: "WORLD"},
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} ); /* result => \n${
-  " hello {wrld} {univrs}\n"[tokenize](
-    {wrld: "WORLD", univrs: null},
-    {wrld: null, univrs: "UNIVERSE"},
-    {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
+        " hello {wrld} {univrs}\n"[tokenize](
+          {wrld: "WORLD (Note: missing tokens are ignored)"},
+          {wrld: "WORLD", univrs: null},
+          {wrld: null, univrs: "UNIVERSE"},
+          {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
 
-// [tokenize$]: cleanup empty values
+// [tokenize$]: remove tokens without values (replace with empty string)
 templateStringEx[tokenize$](
+  {univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} );  /* result =>\n${
-  " hello {wrld} {univrs}\n"[tokenize$](
-    {wrld: "WORLD", univrs: null},
-    {wrld: null, univrs: "UNIVERSE"},
-    {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
+        " hello {wrld} {univrs}\n"[tokenize$](
+          {univrs: "UNIVERSE (Note: missing tokens are cleared)"},
+          {wrld: "WORLD", univrs: null},
+          {wrld: null, univrs: "UNIVERSE"},
+          {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
     
 // escaped "{" and/or "}" and non existing token values are ignored
 const replacement = { blah: "FOOBLAH", bar: "BARRED" };
@@ -255,9 +303,9 @@ someStr[tokenize$](replacement); => "${someStr[tokenize$](replacement)}"</code><
 // to fill the next table, a single object with array values is used
 const theNamesTokensAsArrays = {
   pre: [ "Mary", "Muhammed", "Missy", "Hillary", "Foo", "Bar",
-        "小平", "Володимир", "zero (0)", "Row", null, "missing value =>" ],
+        "小平", "Володимир", "zero (0)", "Row", null, "missing value" ],
   last: [ "Peterson", "Ali", "Johnson", "Clinton", "Bar", "Foo",
-          "邓", "Зеленський", "0", "10", "<= missing value", null ]
+          "邓", "Зеленський", "0", "10", "missing value", null ]
 };</code>`,
     
     tableTemplatesCode: `<br><pre class="syntax language-javascript line-numbers"><code class="language-javascript">
@@ -295,5 +343,11 @@ function createContent() {
   $(`<div class="container">`).append($(`#log2screen`));
   $.editCssRule(`.bottomSpace { height: ${$.node(`.container`).clientHeight}px; }`);
   $(`#log2screen`).afterMe(`<div class="bottomSpace">`);
+}
+
+function checkCBPage() {
+  if (location.href.includes(`codeberg.page`)) {
+    $(`head`).append(`<base href="https://kooiinc.codeberg.page/JS-Interpolate/">`);
+  }
 }
 /* endregion indexCreatr */
