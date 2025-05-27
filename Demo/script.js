@@ -1,6 +1,8 @@
 // $ etc. @https://github.com/KooiInc/SBHelpers
 // 20240612
 // -----------------------------------------------------------------------
+const { $, logFactory,  } =
+  await import("https://cdn.jsdelivr.net/gh/KooiInc/SBHelpers/index.browser.bundled.js");
 checkCBPage();
 import {default as interpolate, interpolateFactory} from "../index.js";
 const tokenize = Symbol.for("interpolate");
@@ -8,8 +10,6 @@ const tokenize$ = Symbol.for("interpolate$");
 // try out in developer screen
 window.tokenize = tokenize;
 window.interpolate = interpolate;
-const { $, logFactory,  } =
-  await import("https://cdn.jsdelivr.net/gh/KooiInc/SBHelpers/index.browser.bundled.js");
 const { log } = logFactory();
 const insert = interpolateFactory("¡no value!");
 const demoText = demoTexts();
