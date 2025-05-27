@@ -2,7 +2,7 @@
 // $ etc. @https://github.com/KooiInc/SBHelpers
 // 20240612
 // -----------------------------------------------------------------------
-import {default as interpolate, interpolateFactory} from "../interpolate.module.js";
+import {default as interpolate, interpolateFactory} from "../index.js";
 const tokenize = Symbol.for("interpolate");
 const tokenize$ = Symbol.for("interpolate$");
 // try out in developer screen
