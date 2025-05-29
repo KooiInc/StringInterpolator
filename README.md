@@ -24,9 +24,8 @@ The repository has two locations: Github (US) and Codeberg (Europe).
 US politics may result in precarious future US/Github policies, 
 which may result in the Github repository ceasing to exist in the future.
 
-Check the **[DEMO @Github](https://kooiinc.github.io/SplatES/Demo)**,
-the **[DEMO @Codeberg](https://kooiinc.codeberg.page/JS-Interpolate/Demo/)**,
-or the (forkable) demo @ **[StackBlitz](https://stackblitz.com/edit/web-platform-nmqf7o?file=script.js)**.
+Check the **[DEMO @Codeberg](https://kooiinc.codeberg.page/JS-Interpolate/Demo/)**, 
+or the **[DEMO @Github](https://kooiinc.github.io/SplatES/Demo)**.
 
 ## Syntax
 - `const splat = interpolateFactory( [defaultReplacer: string (default "")] )`
