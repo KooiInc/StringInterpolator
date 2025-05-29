@@ -1,29 +1,30 @@
 <div align="center">
   <a href="https://bundlephobia.com/package/splat-es" rel="nofollow">
   <a href="https://bundlephobia.com/package/splat-es@latest" rel="nofollow">
-  <img src="https://badgen.net/bundlephobia/min/splat-es"></a>
-  <a target="_blank" href="https://www.npmjs.com/package/splat-es"><img src="https://img.shields.io/npm/v/splat-es.svg?labelColor=cb3837&logo=npm&color=dcfdd9"></a>
+    <img src="https://badgen.net/bundlephobia/min/splat-es"></a>
+  <a target="_blank" href="https://www.npmjs.com/package/splat-es">
+    <img src="https://img.shields.io/npm/v/splat-es.svg?labelColor=cb3837&logo=npm&color=dcfdd9"></a>
 </div>
-    
+
 # SplatES: a string templating utility
 
-A small string templating utility. Use it to replace tags (tokens, e.g. `Hello {myToken}`) within strings 
+A small string templating utility. Use it to replace tags (tokens, e.g. `Hello {myToken}`) within strings
 using one or more Objects for replacements (e.g. `{myToken: "world!"}`).
 
-The utiltity exports by default a function to replace one or more tokens (`"Some string {token1}, {token2}"`) 
+The utiltity exports by default a function to replace one or more tokens (`"Some string {token1}, {token2}"`)
 within a string.
 
 The tokens are replaced using one or more objects containing the tokens to replace as keys and the
 values to replace it/them with (
 `[imported interpolator]("Some string {token1}, {token2}", {token1: "one"}, token2: "two"})`)).
 
-The utiltity also exports the `interpolateClear` function and 
-the factory function itself (named `interpolateFactory`). 
-`interpolateClear` clears missing replacement values (e.g. `{token1: null}`) 
+The utiltity also exports the `interpolateClear` function and
+the factory function itself (named `interpolateFactory`).
+`interpolateClear` clears missing replacement values (e.g. `{token1: null}`)
 by replacing the tokens with a an empty string.
 
-Besides the three exported functions, on initialization `String.prototype` is extended with two Symbols: 
-- `Symbol.for("interpolate")`: default interpolator 
+Besides the three exported functions, on initialization `String.prototype` is extended with two Symbols:
+- `Symbol.for("interpolate")`: default interpolator
 - `Symbol.for("interpolate$")`: clears missing replacement values (replaces them with `""`).
 
 ## Repository location
@@ -31,18 +32,18 @@ The repository has two locations: Github (US) and Codeberg (Europe).
 US politics may result in precarious future US/Github policies, 
 which may result in the Github repository ceasing to exist in the future.
 
-Check the **[DEMO @Codeberg](https://kooiinc.codeberg.page/JS-Interpolate/Demo/)**, 
+Check the **[DEMO @Codeberg](https://kooiinc.codeberg.page/splatES/Demo/)**, 
 or the **[DEMO @Github](https://kooiinc.github.io/SplatES/Demo)**.
 
 ## Syntax
 - `const splat = interpolateFactory( [defaultReplacer: string (default "")] )`
-- `[imported default interpolate function]( String2Interpolate: string, Object[, Object, ...] )` 
+- `[imported default interpolate function]( String2Interpolate: string, Object[, Object, ...] )`
 - `[imported interpolateClear function]( String2Interpolate: string, Object[, Object, ...] )`
 - `"String {t1} {t2}"[Symbol.for("interpolate")]({t1: "value1", t2: "value2"}, [, {t1: "value1", t2: "value2"}, ...])`
 - `"String {t1} {t2}"[Symbol.for("interpolate$"]({t1: "value1", t2: "value2"}, [, {t1: "value1", t2: "value2"}, ...])`
 
 Where `String2Interpolate` contains replacement keys between accolades, e.g. `"Hello {prename} {lastname}"`.
-The parameter(s) can be either 
+The parameter(s) can be either
 - a number of key-value pairs<br>
   (e.g. `{prename: "Pete", lastName: "Johnson"}, {prename: "Mary", lastname: "Doe"}, ...`)
 - or a single `Object`, where replacement values are *Arrays*<br>
