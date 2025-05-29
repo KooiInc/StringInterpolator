@@ -68,7 +68,13 @@ function demo() {
     caption: `<code>tableRowTemplate[tokenize]</code> token values are arrays`,
     rows: tableRowTemplate[tokenize](theNamesTokensAsArrays)
   });
-  log(`!!${tableTemplatesCode}`, `!!${table1}`, `!!${table2}`, `!!${code4Array}`, `!!${table3}`);
+  log(
+    `!!${tableTemplatesCode}`, 
+    `!!${table1}`, 
+    `!!${table2}`, 
+    `!!<h3 class="readme"><b>Use corresponding arrays</b></h3>`, 
+    `!!${code4Array}`, 
+    `!!${table3}` );
   Prism.highlightAll();
   createContent();
 }
