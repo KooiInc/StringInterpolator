@@ -10,7 +10,6 @@ const tokenize$ = Symbol.for("interpolate$");
 window.tokenize = tokenize;
 window.interpolate = interpolate;
 const { log } = logFactory();
-const insert = interpolateFactory("¡no value!");
 const demoText = {};
 await retrieveCodeFragments();
 
@@ -68,11 +67,11 @@ function demo() {
     rows: tableRowTemplate[tokenize](theNamesTokensAsArrays)
   });
   log(
-    `!!${tableTemplatesCode}`, 
-    `!!${table1}`, 
-    `!!${table2}`, 
-    `!!<h3 class="readme"><b>Use corresponding arrays</b></h3>`, 
-    `!!${code4Array}`, 
+    `!!${tableTemplatesCode}`,
+    `!!${table1}`,
+    `!!${table2}`,
+    `!!<h3 class="readme"><b>Use corresponding arrays</b></h3>`,
+    `!!${code4Array}`,
     `!!${table3}` );
   Prism.highlightAll();
   createContent();
@@ -81,6 +80,83 @@ function demo() {
 function escHTML(htmlStr) {
   return htmlStr.replace(/</g, `&lt;`)
 }
+
+function getNamesObj() {
+  return [
+    {pre: `Mary`, last: `Peterson`},
+    {pre: `Muhammed`, last: `Ali`},
+    {pre: `Missy`, last: `Johnson`},
+    {pre: `Hillary`, last: `Clinton`},
+    {pre: `Foo`, last: `Bar`},
+    {pre: `Bar`, last: `Foo`},
+    {pre: `小平`, last: `邓`},
+    {pre: `Володимир`, last: `Зеленський`},
+    {pre: `zero (0)`, last: 0},
+    {pre: `Row`, last: 10},
+    {pre: `replacement-is-empty-string`, last: ''},     // ᐊ Empty string value IS replaced
+    {
+      pre: `<b class="notifyHeader">Invalid/missing token keys/values are kept</b>`,
+      last: `<span class="largeArrowDown"></span>`
+    },
+    // if !defaultReplacer ...
+    {pre: `replacement-Is-array`, last: [1, 2, 3]},       // ᐊ Array value IS NOT replaced/
+    {pre: `replacement-Is-null`, last: null},           // ᐊ null value IS NOT replaced
+    {pre: `replacement-Is-object`, last: {}},          // ᐊ Object value IS NOT replaced
+    {pre: `replacement-Is-undefined`, last: undefined}, // ᐊ undefined value IS NOT replaced
+    {last: `key-pre-does-not-exist`},                   // ᐊ undefined value IS NOT replaced
+    {pre: `key-last-does-not-exist`},                   // ᐊ incomplete object, what exists is replaced
+    {some: `nothing-to-replace`, name: `nothing`},      // ᐊ non existing keys, tokens ignored
+    {},                                                 // ᐊ empty object, tokens ignored
+    [`nothing`, `nada`, `zip`, `没有什么`,               // ᐊ replacement not an Object, tokens ignored
+      `niente`, `rien`, `ничего`]
+  ];
+}
+
+function getCodeblocks(templatesDiv) {
+  const codeTemplate =
+    `<pre class="syntax language-javascript line-numbers"><code class="language-javascript">{code}</code></pre>`;
+  templatesDiv.find$(`template`).each(template => {
+    switch (true) {
+      case /syntax|tableTemplatesCode|code4Array/.test(template.id): {
+        demoText[template.id] = interpolate(codeTemplate, {code: escHTML(template.innerHTML).trim()});
+        break;
+      }
+      default: demoText[template.id] = template.innerHTML;
+    }
+  });
+  
+  demoText.links = getLinks();
+}
+
+async function retrieveCodeFragments() {
+  $.allowTag(`template`);
+  await fetch(`./codeFragments.html`)
+    .then( r => r.text())
+    .then( r => {
+      getCodeblocks($(`<div>${r}</div>`))
+    } );
+}
+
+function getLinks() {
+  const isGithub = /github/i.test(location.href);
+  const back2repo = `(back to) repository`;
+  const isLocal = /localhost/.test(location.href);
+  return [
+    isLocal
+      ? `!!LOCAL TEST`
+      :  isGithub
+        ? `!!<a class="ghBacklink "target="_top" href="https://github.com/KooiInc/SplatES">${back2repo}</a>`
+        : `!!<a class="cbBacklink" target="_top" href="https://codeberg.org/KooiInc/splatES">${back2repo}</a>`
+  ];
+}
+
+/* region indexCreatr */
+function createContent() {
+  $(`<div class="container">`).append($(`#log2screen`));
+  $.editCssRule(`.bottomSpace { height: ${$.node(`.container`).clientHeight}px; }`);
+  $(`#log2screen`).afterMe(`<div class="bottomSpace">`);
+}
+/* endregion indexCreatr */
 
 function setStyling() {
   const repeat = (str, n = 2) => `${str}${Array(n).join(str)}`;
@@ -186,86 +262,3 @@ function setStyling() {
     }`,
   );
 }
-
-function getNamesObj() {
-  return [
-    {pre: `Mary`, last: `Peterson`},
-    {pre: `Muhammed`, last: `Ali`},
-    {pre: `Missy`, last: `Johnson`},
-    {pre: `Hillary`, last: `Clinton`},
-    {pre: `Foo`, last: `Bar`},
-    {pre: `Bar`, last: `Foo`},
-    {pre: `小平`, last: `邓`},
-    {pre: `Володимир`, last: `Зеленський`},
-    {pre: `zero (0)`, last: 0},
-    {pre: `Row`, last: 10},
-    {pre: `replacement-is-empty-string`, last: ''},     // ᐊ Empty string value IS replaced
-    {
-      pre: `<b class="notifyHeader">Invalid/missing token keys/values are kept</b>`,
-      last: `<span class="largeArrowDown"></span>`
-    },
-    // if !defaultReplacer ...
-    {pre: `replacement-Is-array`, last: [1, 2, 3]},       // ᐊ Array value IS NOT replaced/
-    {pre: `replacement-Is-null`, last: null},           // ᐊ null value IS NOT replaced
-    {pre: `replacement-Is-object`, last: {}},          // ᐊ Object value IS NOT replaced
-    {pre: `replacement-Is-undefined`, last: undefined}, // ᐊ undefined value IS NOT replaced
-    {last: `key-pre-does-not-exist`},                   // ᐊ undefined value IS NOT replaced
-    {pre: `key-last-does-not-exist`},                   // ᐊ incomplete object, what exists is replaced
-    {some: `nothing-to-replace`, name: `nothing`},      // ᐊ non existing keys, tokens ignored
-    {},                                                 // ᐊ empty object, tokens ignored
-    [`nothing`, `nada`, `zip`, `没有什么`,               // ᐊ replacement not an Object, tokens ignored
-      `niente`, `rien`, `ничего`]
-  ];
-}
-
-function getCodeblocks(templatesDiv) {
-  const codeTemplate =
-    `<pre class="syntax language-javascript line-numbers"><code class="language-javascript">{code}</code></pre>`;
-  templatesDiv.find$(`template`).each(template => {
-    switch (true) {
-      case /syntax|tableTemplatesCode|code4Array/.test(template.id): {
-        demoText[template.id] = interpolate(codeTemplate, {code: escHTML(template.innerHTML).trim()});
-        break;
-      }
-      default: demoText[template.id] = template.innerHTML;
-    }
-  });
-  
-  demoText.links = getLinks();
-}
-
-async function retrieveCodeFragments() {
-  $.allowTag(`template`);
-  await fetch(`./codeFragments.html`)
-    .then( r => r.text())
-    .then( r => {
-      getCodeblocks($(`<div>${r}</div>`))
-    } );
-}
-
-function getLinks() {
-  const isGithub = /github/i.test(location.href);
-  const back2repo = `(back to) repository`;
-  const isLocal = /localhost/.test(location.href);
-  return [
-    isLocal
-      ? `!!LOCAL TEST`
-      :  isGithub
-        ? `!!<a class="ghBacklink "target="_top" href="https://github.com/KooiInc/SplatES">${back2repo}</a>`
-        : `!!<a class="cbBacklink" target="_top" href="https://codeberg.org/KooiInc/splatES">${back2repo}</a>`
-  ];
-}
-
-/* region indexCreatr */
-function createContent() {
-  $(`<div class="container">`).append($(`#log2screen`));
-  $.editCssRule(`.bottomSpace { height: ${$.node(`.container`).clientHeight}px; }`);
-  $(`#log2screen`).afterMe(`<div class="bottomSpace">`);
-}
-
-function checkCBPage() {
-  if (location.href.includes(`codeberg.page`)) {
-    $(`head`).append(`<base href="https://kooiinc.codeberg.page/splatES/">`);
-  }
-}
-/* endregion indexCreatr */
