@@ -96,10 +96,8 @@ const theNames = [
   {pre: "Володимир", last: "Зеленський"},
   {pre: "zero (0)", last: 0},
   {pre: "Row", last: 10},
+  // ignored/cleared values
   {pre: "replacement-is-empty-string", last: ''},     // ᐊ Empty string value IS replaced
-  { pre: "<b class="notifyHeader">Invalid/missing token keys/values are kept</b>",
-    last: "<span class="largeArrowDown"></span>" },
-  // if !defaultReplacer ...
   {pre: "replacement-Is-array", last: [1, 2, 3]},     // ᐊ Array value IS NOT replaced/
   {pre: "replacement-Is-null", last: null},           // ᐊ null value IS NOT replaced
   {pre: "replacement-Is-object", last: {}},           // ᐊ Object value IS NOT replaced
@@ -108,8 +106,7 @@ const theNames = [
   {pre: "key-last-does-not-exist"},                   // ᐊ incomplete object, what exists is replaced
   {some: "nothing-to-replace", name: "nothing"},      // ᐊ non existing keys, tokens ignored
   {},                                                 // ᐊ empty object, tokens ignored
-  ["nothing", "nada", "zip", "没有什么",               // ᐊ replacement not an Object, tokens ignored
-  "niente", "rien", "ничего"]
+  ["nothing", "nada", "zip", "没有什么"]               // ᐊ replacement not an Object, tokens ignored
 ];
 </template>
 
