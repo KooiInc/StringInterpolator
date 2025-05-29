@@ -1,0 +1,140 @@
+<!-- here are the fragments used in the demo -->
+<template id="syntax">
+// import
+import {interpolateFactory}  from "[module location]";
+//      ^ the interpolateFactory to create an interpolate function
+
+// create an interpolator function with a default replacement value
+// (replaces tokens with empty values with the default replacement value)
+const insert = interpolateFactory("¡no value!");
+const templateStringEx = " hello {wrld} {univrs}\n";
+
+// use insert
+insert(
+  templateStringEx,
+  {wrld: "WORLD", univrs: null},
+  {wrld: null, univrs: "UNIVERSE"},
+  {wrld: "WORLD", univrs: "AND UNIVERSE"} );
+  /* result =>
+  hello WORLD ¡no value!
+  hello ¡no value! UNIVERSE
+  hello WORLD AND UNIVERSE */
+
+// On importing interpolateFactory String.prototype
+// was extended using 2 Symbols. Here we
+// assign them to variables.
+const tokenize = Symbol.for("interpolate");
+const tokenize$ = Symbol.for("interpolate$");
+
+// now we can use the 'symbolic extensions' (named tokenize/tokenize$)
+// [tokenize]: keep tokens with empty values intact
+templateStringEx[tokenize](
+  {wrld: "WORLD"},
+  {wrld: "WORLD", univrs: null},
+  {wrld: null, univrs: "UNIVERSE"},
+  {wrld: "WORLD", univrs: "AND UNIVERSE"} );
+  /* result =>
+  hello WORLD (Note: missing tokens are ignored) {univrs}
+  hello WORLD {univrs}
+  hello {wrld} UNIVERSE
+  hello WORLD AND UNIVERSE */
+
+// [tokenize$]: remove tokens without values (replace with empty string)
+templateStringEx[tokenize$](
+  {univrs: "UNIVERSE"},
+  {wrld: "WORLD", univrs: null},
+  {wrld: null, univrs: "UNIVERSE"},
+  {wrld: "WORLD", univrs: "AND UNIVERSE"} );
+  /* result =>
+  hello  UNIVERSE (Note: missing tokens are cleared)
+  hello WORLD
+  hello  UNIVERSE
+  hello WORLD AND UNIVERSE */
+
+// escaped "{" and/or "}" and non existing token values are ignored
+const replacement = { blah: "FOOBLAH", bar: "BARRED" };
+const someStr = "Blah [{blah}] and blah and {foo}, but then again [\{bar\} | {bar}]";
+//                                           ^                     ^ escaped/ignored
+//                                           ^ not in [replacement]/ignored
+someStr[tokenize](replacement); => "Blah [FOOBLAH] and blah and {foo}, but then again [\{bar\} | BARRED]"
+someStr[tokenize$](replacement); => "Blah [FOOBLAH] and blah and  | BARRED]"
+</template>
+
+<template id="tableTemplatesCode">
+// the templates for the following tables
+const tableTemplate = "
+  &lt;table>\
+  &lt;caption>{caption}&lt;/caption>\
+  &lt;thead>\
+    &lt;tr>
+      &lt;th>#&lt;/th>\
+      &lt;th>prename&lt;/th>\
+      &lt;th>surname&lt;/th>\
+    &lt;/tr>\
+  &lt;/thead>\
+  &lt;tbody>{rows}&lt;/tbody>
+  &lt;/table>";
+const tableRowTemplate = "
+  &lt;tr>\
+    &lt;td>{index}&lt;/td>\
+    &lt;td>{pre}&lt;/td>\
+    &lt;td>{last}&lt;/td>\
+  &lt;/tr>";
+/* ∟ Note:
+    adding {index} in the template string is optional.
+    It will be automatically replaced with the index
+    (starting with 1) of the insertion */
+
+/* the tokens used for tableRowTemplate */
+const theNames = [
+  {pre: "Mary", last: "Peterson"},
+  {pre: "Muhammed", last: "Ali"},
+  {pre: "Missy", last: "Johnson"},
+  {pre: "Hillary", last: "Clinton"},
+  {pre: "Foo", last: "Bar"},
+  {pre: "Bar", last: "Foo"},
+  {pre: "小平", last: "邓"},
+  {pre: "Володимир", last: "Зеленський"},
+  {pre: "zero (0)", last: 0},
+  {pre: "Row", last: 10},
+  // ignored/cleared values
+  {pre: "replacement-is-empty-string", last: ''},     // ᐊ Empty string value IS replaced
+  {pre: "replacement-Is-array", last: [1, 2, 3]},     // ᐊ Array value IS NOT replaced/
+  {pre: "replacement-Is-null", last: null},           // ᐊ null value IS NOT replaced
+  {pre: "replacement-Is-object", last: {}},           // ᐊ Object value IS NOT replaced
+  {pre: "replacement-Is-undefined", last: undefined}, // ᐊ undefined value IS NOT replaced
+  {last: "key-pre-does-not-exist"},                   // ᐊ undefined value IS NOT replaced
+  {pre: "key-last-does-not-exist"},                   // ᐊ incomplete object, what exists is replaced
+  {some: "nothing-to-replace", name: "nothing"},      // ᐊ non existing keys, tokens ignored
+  {},                                                 // ᐊ empty object, tokens ignored
+  ["nothing", "nada", "zip", "没有什么"]               // ᐊ replacement not an Object, tokens ignored
+];
+</template>
+
+<template id="code4Array">
+// to fill the next table, a single object with array values is used
+const theNamesTokensAsArrays = {
+  pre: [ "Mary", "Muhammed", "Missy", "Hillary", "Foo", "Bar",
+    "小平", "Володимир", "zero (0)", "Row", null, "missing value" ],
+  last: [ "Peterson", "Ali", "Johnson", "Clinton", "Bar", "Foo",
+    "邓", "Зеленський", "0", "10", "missing value", null ]
+};
+</template>
+
+<template id="codeFragment">
+  <pre class="syntax language-javascript line-numbers"><code class="language-javascript">{code}</code></pre>
+</template>
+
+<template id="preSyntax">
+  <div>
+    <div class="readme">The module exports the factory itself (<code>interpolateFactory</code>),
+    the <code>interpolate</code> function (default) and the <code>interpolateClear</code> function (which
+    clears empty placeholders).</div>
+
+    <div class="readme">Importing the module also provides two <code>Symbol</code>s that are used to extend
+      <code>String.prototype</code> (<code>Symbol.for("interpolate")</code> and
+      <code>Symbol.for("interpolate$")</code>).</div>
+
+    <h3 class="readme"><b>Syntax by example</b></h3>
+  </div>
+</template>

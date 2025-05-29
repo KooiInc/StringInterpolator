@@ -12,12 +12,13 @@ window.tokenize = tokenize;
 window.interpolate = interpolate;
 const { log } = logFactory();
 const insert = interpolateFactory("¡no value!");
-const demoText = demoTexts();
+const demoText = {};
+await retrieveCodeFragments();
 
 demo();
 
 function demo() {
-  log(...demoText.links, `!!<hr>${demoText.preSyntax}${demoText.syntax}`);
+  log(...(demoText.links), `!!<hr>${demoText.preSyntax}${demoText.syntax}`);
   const code4Array = demoText.code4Array;
   const tableTemplatesCode = demoText.tableTemplatesCode;
   
@@ -67,7 +68,13 @@ function demo() {
     caption: `<code>tableRowTemplate[tokenize]</code> token values are arrays`,
     rows: tableRowTemplate[tokenize](theNamesTokensAsArrays)
   });
-  log(`!!${tableTemplatesCode}`, `!!${table1}`, `!!${table2}`, `!!${code4Array}`, `!!${table3}`);
+  log(
+    `!!${tableTemplatesCode}`, 
+    `!!${table1}`, 
+    `!!${table2}`, 
+    `!!<h3 class="readme"><b>Use corresponding arrays</b></h3>`, 
+    `!!${code4Array}`, 
+    `!!${table3}` );
   Prism.highlightAll();
   createContent();
 }
@@ -212,130 +219,42 @@ function getNamesObj() {
   ];
 }
 
-function demoTexts() {
+function getCodeblocks(templatesDiv) {
+  const codeTemplate =
+    `<pre class="syntax language-javascript line-numbers"><code class="language-javascript">{code}</code></pre>`;
+  templatesDiv.find$(`template`).each(template => {
+    switch (true) {
+      case /syntax|tableTemplatesCode|code4Array/.test(template.id): {
+        demoText[template.id] = interpolate(codeTemplate, {code: escHTML(template.innerHTML).trim()});
+        break;
+      }
+      default: demoText[template.id] = template.innerHTML;
+    }
+  });
+  
+  demoText.links = getLinks();
+}
+
+async function retrieveCodeFragments() {
+  $.allowTag(`template`);
+  await fetch(`./codeFragments.html`)
+    .then( r => r.text())
+    .then( r => {
+      getCodeblocks($(`<div>${r}</div>`))
+    } );
+}
+
+function getLinks() {
   const isGithub = /github/i.test(location.href);
   const back2repo = `(back to) repository`;
   const isLocal = /localhost/.test(location.href);
-  const links = [
-      isGithub
+  return [
+    isLocal
+      ? `!!LOCAL TEST`
+      :  isGithub
         ? `!!<a class="ghBacklink "target="_top" href="https://github.com/KooiInc/SplatES">${back2repo}</a>`
         : `!!<a class="cbBacklink" target="_top" href="https://codeberg.org/KooiInc/splatES">${back2repo}</a>`
   ];
-  const replacement = {blah: `FOOBLAH`, bar: `BARRED`};
-  const someStr = `Blah [{blah}] and blah and {foo}, but then again [\\{bar\\} | {bar}]`;
-  const namesUsed = getNamesObj.toString()
-    .replace(/`/g, `"`)
-    .replace(/\n {2,}/g, `\n  `)
-    .replace(/\n\s+]/, `\n]`)
-    .replace(/</g, `&lt;`);
-  return {
-    links: !isLocal && links || [`!!LOCAL TEST`],
-    preSyntax: `<div class="readme">The module exports the factory itself (<code>interpolateFactory</code>),
-       the <code>interpolate</code> function (default) and the <code>interpolateClear</code> function (which
-       clears empty placeholders).</div>
-    
-       <div class="readme">Importing the module also provides two <code>Symbol</code>s that are used to extend
-       <code>String.prototype</code> (<code>Symbol.for("interpolate")</code> and
-       <code>Symbol.for("interpolate$")</code>).</div>
-    
-       <h3 class="readme"><b>Syntax by example</b></h3>`,
-    
-    syntax:
-      `<pre class="syntax language-javascript line-numbers"><code class="language-javascript">// import
-import {interpolateFactory}  from "[module location]";
-//      ^ the interpolateFactory to create an interpolate function
-
-// create an interpolator function with a default replacement value
-// (replaces tokens with empty values with the default replacement value)
-const insert = interpolateFactory("¡no value!");
-const templateStringEx = " hello {wrld} {univrs}\\n";
-
-// use insert
-insert(templateStringEx,
-  {wrld: "WORLD", univrs: null},
-  {wrld: null, univrs: "UNIVERSE"},
-  {wrld: "WORLD", univrs: "AND UNIVERSE"} );  /* result =>\n${
-        insert(" hello {wrld} {univrs}\n",
-          {wrld: "WORLD", univrs: null},
-          {wrld: null, univrs: "UNIVERSE"},
-          {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
-
-// On importing interpolateFactory String.prototype
-// was extended using 2 Symbols. Here we
-// assign them to variables.
-const tokenize = Symbol.for("interpolate");
-const tokenize$ = Symbol.for("interpolate$");
-
-// now we can use the 'symbolic extensions' (named tokenize/tokenize$)
-// [tokenize]: keep tokens with empty values intact
-templateStringEx[tokenize](
-  {wrld: "WORLD"},
-  {wrld: "WORLD", univrs: null},
-  {wrld: null, univrs: "UNIVERSE"},
-  {wrld: "WORLD", univrs: "AND UNIVERSE"} ); /* result => \n${
-        " hello {wrld} {univrs}\n"[tokenize](
-          {wrld: "WORLD (Note: missing tokens are ignored)"},
-          {wrld: "WORLD", univrs: null},
-          {wrld: null, univrs: "UNIVERSE"},
-          {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
-
-// [tokenize$]: remove tokens without values (replace with empty string)
-templateStringEx[tokenize$](
-  {univrs: "UNIVERSE"},
-  {wrld: "WORLD", univrs: null},
-  {wrld: null, univrs: "UNIVERSE"},
-  {wrld: "WORLD", univrs: "AND UNIVERSE"} );  /* result =>\n${
-        " hello {wrld} {univrs}\n"[tokenize$](
-          {univrs: "UNIVERSE (Note: missing tokens are cleared)"},
-          {wrld: "WORLD", univrs: null},
-          {wrld: null, univrs: "UNIVERSE"},
-          {wrld: "WORLD", univrs: "AND UNIVERSE"})}*/
-    
-// escaped "{" and/or "}" and non existing token values are ignored
-const replacement = { blah: "FOOBLAH", bar: "BARRED" };
-const someStr = "Blah [{blah}] and blah and {foo}, but then again [\\{bar\\} | {bar}]";
-//                                           ^                     ^ escaped/ignored
-//                                           ^ not in [replacement]/ignored
-someStr[tokenize](replacement); => "${someStr[tokenize](replacement)}"
-someStr[tokenize$](replacement); => "${someStr[tokenize$](replacement)}"</code></pre>`,
-    
-    code4Array: `<br><pre class="syntax language-javascript line-numbers"><code class="language-javascript">
-// to fill the next table, a single object with array values is used
-const theNamesTokensAsArrays = {
-  pre: [ "Mary", "Muhammed", "Missy", "Hillary", "Foo", "Bar",
-        "小平", "Володимир", "zero (0)", "Row", null, "missing value" ],
-  last: [ "Peterson", "Ali", "Johnson", "Clinton", "Bar", "Foo",
-          "邓", "Зеленський", "0", "10", "missing value", null ]
-};</code>`,
-    
-    tableTemplatesCode: `<br><pre class="syntax language-javascript line-numbers"><code class="language-javascript">
-// the templates for the following tables
-const tableTemplate = ${escHTML(`
-"<table>\\
-  <caption>{caption}</caption>\\
-  <thead>\\
-    <tr>\\
-      <th>#</th>\\
-      <th>prename</th>\\
-      <th>surname</th>\\
-    </tr>\\
-  </thead>\\
-  <tbody>{rows}</tbody>\\
-</table>"`)};
-const tableRowTemplate = ${escHTML(`
-"<tr>\\
-  <td>{index}</td>\\
-  <td>{pre}</td>\\
-  <td>{last}</td>\\
-</tr>"`)};
-/* ∟ Note:
-   adding {index} in the template string is optional.
-   It will be automatically replaced with the index
-   (starting with 1) of the insertion */
-
-/* the tokens used for tableRowTemplate */
-const theNames = ${namesUsed.slice(namesUsed.indexOf(`[`), -1).trim()}</code></pre>`,
-  };
 }
 
 /* region indexCreatr */
