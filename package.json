@@ -1,6 +1,6 @@
 {
   "name": "splat-es",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "a small module for ES string interpolation",
   "main": "index.js",
   "license": "GPL-3.0",
