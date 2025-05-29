@@ -218,8 +218,8 @@ function demoTexts() {
   const isLocal = /localhost/.test(location.href);
   const links = [
       isGithub
-        ? `!!<a class="ghBacklink "target="_top" href="https://github.com/KooiInc/StringInterpolator">${back2repo}</a>`
-        : `!!<a class="cbBacklink" target="_top" href="https://codeberg.org/KooiInc/JS-Interpolate">${back2repo}</a>`
+        ? `!!<a class="ghBacklink "target="_top" href="https://github.com/KooiInc/SplatES">${back2repo}</a>`
+        : `!!<a class="cbBacklink" target="_top" href="https://codeberg.org/KooiInc/splatES">${back2repo}</a>`
   ];
   const replacement = {blah: `FOOBLAH`, bar: `BARRED`};
   const someStr = `Blah [{blah}] and blah and {foo}, but then again [\\{bar\\} | {bar}]`;
@@ -347,7 +347,7 @@ function createContent() {
 
 function checkCBPage() {
   if (location.href.includes(`codeberg.page`)) {
-    $(`head`).append(`<base href="https://kooiinc.codeberg.page/JS-Interpolate/">`);
+    $(`head`).append(`<base href="https://kooiinc.codeberg.page/splatES/">`);
   }
 }
 /* endregion indexCreatr */
