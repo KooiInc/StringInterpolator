@@ -3,7 +3,6 @@
 // -----------------------------------------------------------------------
 const { $, logFactory,  } =
   await import("https://cdn.jsdelivr.net/gh/KooiInc/SBHelpers/index.browser.bundled.js");
-checkCBPage();
 import {default as interpolate, interpolateFactory} from "../index.js";
 const tokenize = Symbol.for("interpolate");
 const tokenize$ = Symbol.for("interpolate$");
