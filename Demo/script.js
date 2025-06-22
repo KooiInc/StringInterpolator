@@ -114,7 +114,8 @@ function getNamesObj() {
 
 function getCodeblocks(templatesDiv) {
   const codeTemplate =
-    `<pre class="syntax language-javascript line-numbers"><code class="language-javascript">{code}</code></pre>`;
+    `<pre class="syntax language-javascript line-numbers"
+        ><code class="language-javascript">{code}</code></pre>`;
   templatesDiv.find$(`template`).each(template => {
     switch (true) {
       case /syntax|tableTemplatesCode|code4Array/.test(template.id): {
